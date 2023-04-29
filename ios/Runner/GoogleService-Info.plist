@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>609290111654-kfskippp7u1i5vr61fnu7dqt755mh5oe.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.609290111654-kfskippp7u1i5vr61fnu7dqt755mh5oe</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCJbqMiUgJtOQSEF1c0entgDqe63zH4UL4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>609290111654</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.hamilguide.pregnancycalc</string>
+	<key>PROJECT_ID</key>
+	<string>hwamelnew</string>
+	<key>STORAGE_BUCKET</key>
+	<string>hwamelnew.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:609290111654:ios:a0a82ba03d271a6d8c8267</string>
+	<key>ADMOB_APP_ID</key>
+	<string>ca-app-pub-7186380452289746~1970354613</string>
+</dict>
+</plist>

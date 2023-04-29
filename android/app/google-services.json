@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "609290111654",
+    "project_id": "hwamelnew",
+    "storage_bucket": "hwamelnew.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:609290111654:android:9147e4f1997f7a8c8c8267",
+        "android_client_info": {
+          "package_name": "com.dalil.elhwamelss"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "609290111654-5cj2gceb9rk17s9u5gvgp4d0ejbkd0pr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyryReMXYaSPnchq4Z1tbaQvffTHqMEJg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "609290111654-5cj2gceb9rk17s9u5gvgp4d0ejbkd0pr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "609290111654-kfskippp7u1i5vr61fnu7dqt755mh5oe.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hamilguide.pregnancycalc"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
