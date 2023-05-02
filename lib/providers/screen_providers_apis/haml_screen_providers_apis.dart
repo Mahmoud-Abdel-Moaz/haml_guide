@@ -1,13 +1,19 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:haml_guide/config/api_keys.dart';
 import 'package:haml_guide/config/api_requests.dart';
 import 'package:haml_guide/config/common_components.dart';
 import 'package:haml_guide/config/init_screen_providers.dart';
 import 'package:haml_guide/models/haml_calculation_model.dart';
 import 'package:haml_guide/models/haml_screen_model.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:riverpod_context/riverpod_context.dart';
+
+import '../../config/cache_helper.dart';
+import '../../config/local_notification_service.dart';
 
 class HamlScreenProvidersApis extends ChangeNotifier {
   // int deviceIDFromDataBase;
@@ -22,21 +28,22 @@ class HamlScreenProvidersApis extends ChangeNotifier {
     required String? miladyDate,
     required String? hijariDate,
     required String fcmToken,
+    required String country,
   }) async {
     String deviceID =
         await CommonComponents.getSavedData(ApiKeys.deviceIdFromUser);
 
     if (context.mounted) {
-      List<dynamic> dataList = await ApiRequests.getApiRequests(
+      Map<String, dynamic> dataList = await ApiRequests.getApiRequests(
         context: context,
         baseUrl: ApiKeys.baseUrl,
         apiUrl: "api/v1/devices?device_id=$deviceID",
         headers: {},
       );
       bool deviceIdIsFoundInDataBase = false;
-
+log('hamel calc $dataList');
       if (dataList != null) {
-        if (dataList.isNotEmpty) {
+        if (dataList['results'].isNotEmpty) {
           for (int i = 0; i < dataList.length; i++) {
             if (dataList[i]['device_id'] == deviceID) {
               deviceIdIsFoundInDataBase = true;
@@ -57,7 +64,7 @@ class HamlScreenProvidersApis extends ChangeNotifier {
                   context: context,
                   miladyDate: miladyDate??'',
                   hijariDate: hijariDate??'',
-                  fcmToken: fcmToken,
+                  fcmToken: fcmToken, country: country,
                 );
                 if (context.mounted) {
                   context
@@ -78,7 +85,7 @@ class HamlScreenProvidersApis extends ChangeNotifier {
                 context: context,
                 miladyDate: miladyDate,
                 hijariDate: hijariDate,
-                fcmToken: fcmToken,
+                fcmToken: fcmToken, country: country,
               );
             } else {
               return;
@@ -90,7 +97,7 @@ class HamlScreenProvidersApis extends ChangeNotifier {
               context: context,
               miladyDate: miladyDate,
               hijariDate: hijariDate,
-              fcmToken: fcmToken,
+              fcmToken: fcmToken, country: country,
             );
           } else {
             return;
@@ -113,12 +120,13 @@ class HamlScreenProvidersApis extends ChangeNotifier {
     required String? miladyDate,
     required String? hijariDate,
     required String fcmToken,
+    required String country,
   }) async {
     String deviceID =
         await CommonComponents.getSavedData(ApiKeys.deviceIdFromUser);
 
     HamlScreenModel model = HamlScreenModel(
-        deviceID: deviceID, hijariDate: hijariDate, miladyDate: miladyDate);
+        deviceID: deviceID, hijariDate: hijariDate, miladyDate: miladyDate,country: country,deviceType: Platform.isIOS?'IOS':'ANDROID',status: 'online',);
 
     if (context.mounted) {
       Map<String, dynamic> data = await ApiRequests.postApiRequests(
@@ -162,6 +170,7 @@ class HamlScreenProvidersApis extends ChangeNotifier {
     required String? miladyDate,
     required String? hijariDate,
     required String fcmToken,
+    required String country,
   }) async {
     int deviceIDFromApi =
         await CommonComponents.getSavedData(ApiKeys.deviceIdFromApi);
@@ -172,7 +181,8 @@ class HamlScreenProvidersApis extends ChangeNotifier {
     HamlScreenModel model = HamlScreenModel(
       hijariDate: hijariDate,
       miladyDate: miladyDate,
-      deviceID: deviceIDFromUser,
+      deviceID: deviceIDFromUser
+      ,country: country,deviceType: Platform.isIOS?'IOS':'ANDROID',status: 'online',
     );
 
     if (context.mounted) {
@@ -186,6 +196,8 @@ class HamlScreenProvidersApis extends ChangeNotifier {
         },
         body: json.encode(model.toJsonWithUpdate(fcmToken)),
       );
+      log('hamel calc 2 $data');
+      setWeeksRemainderNotification(data);
       CommonComponents.saveData(
           key: ApiKeys.hamlCalc, value: jsonEncode(data));
 
@@ -214,6 +226,86 @@ class HamlScreenProvidersApis extends ChangeNotifier {
     }
   }
 
+  setWeeksRemainderNotification(Map<String, dynamic> data)async{
+    print("test notification setWeeksRemainderNotification");
+    PermissionStatus notificationStatus = await Permission.notification.status;
+    if (notificationStatus.isGranted ||
+        notificationStatus.isLimited ||
+        Platform.isMacOS ||
+        Platform.isIOS) {
+      if (Platform.isAndroid && androidInfo != null) {
+        if (androidInfo!.version.sdkInt < 31) {
+          _weeksRemainderNotification(data);
+        } else {
+          PermissionStatus status = await Permission.scheduleExactAlarm.status;
+          if (status.isGranted || status.isLimited) {
+            _weeksRemainderNotification(data);
+          } else {
+            status = await Permission.scheduleExactAlarm.request();
+            if (status.isGranted || status.isLimited) {
+              _weeksRemainderNotification(data);
+            }
+          }
+        }
+      } else {
+        _weeksRemainderNotification(data);
+      }
+    } else {
+      PermissionStatus notificationStatus =
+      await Permission.notification.request();
+      if (notificationStatus.isGranted || notificationStatus.isLimited) {
+        if (Platform.isAndroid && androidInfo != null) {
+          if (androidInfo!.version.sdkInt < 31) {
+            _weeksRemainderNotification(data);
+          } else {
+            PermissionStatus status = await Permission.scheduleExactAlarm.status;
+            if (status.isGranted || status.isLimited) {
+              _weeksRemainderNotification(data);
+            } else {
+              status = await Permission.scheduleExactAlarm.request();
+              if (status.isGranted || status.isLimited) {
+                _weeksRemainderNotification(data);
+              }
+            }
+          }
+        } else {
+          _weeksRemainderNotification(data);
+        }
+      }
+    }
+  }
+
+  Future<void> _weeksRemainderNotification(Map<String, dynamic> data) async {
+    print("test notification _weeksRemainderNotification");
+
+    int babiesNamesNotificationId = 1;
+    LocalNotificationService.cancelNotificationById(babiesNamesNotificationId);
+    DateTime currentTime = DateTime.now();
+    CacheHelper.saveData(key: 'babies_names_notification', value: true);
+    DateTime weeksRemainderTime = DateTime(
+        currentTime.year, currentTime.month, currentTime.day, 17, 0, 0, 0, 0);
+    for(int i = 0; i < 40;i++){
+      LocalNotificationService.cancelNotificationById(i+2);
+    }
+
+    if(data['get_remain']['remain_weeks']>0){
+      for(int i = 0; i < data['get_remain']['remain_weeks'];i++){
+        int id=int.parse('${2+i+data['get_now']['now_weeks']}');
+        print("test notification set week $id ${"انت الأن في ${1+i+data['get_now']['now_weeks']}"}");
+        weeksRemainderTime=weeksRemainderTime.add(const Duration(days: 7));
+      await  LocalNotificationService.setNotification(
+          time: weeksRemainderTime,
+          // id: id + 100 + before,
+          type: 'Week reminder',
+          id: id,
+          title: "انت الأن في ${1+i+data['get_now']['now_weeks']}",
+          body: "تعرفي علي تفاصيل هذا الأسبوع",
+          withSound: true,);
+      }
+    }
+  }
+
+
   Future<HamlCalculationModel?> getUserHamlCalculation(
       {required BuildContext context, required String deviceID, bool getCash=false}) async {
     String? res=  CommonComponents.getSavedData(
@@ -228,18 +320,20 @@ class HamlScreenProvidersApis extends ChangeNotifier {
       log('data HamlCalculatio $res');
       data =jsonDecode(res!);
     }else{
-      List<dynamic> d = await ApiRequests.getApiRequests(
+      List<dynamic> d = (await ApiRequests.getApiRequests(
         context: context,
         baseUrl: ApiKeys.baseUrl,
         apiUrl: "api/v1/devices/?device_id=$deviceID",
         headers: {},
-      );
+      ))['results'];
       print('data $d');
       if((d==null||d.isEmpty)&&res!=null)  {
         data=jsonDecode(res!);
       }else{
-        data=d[0];
-
+        if(data!=null&&data.isNotEmpty) {
+          data = d[0];
+          print('data data $data');
+        }
       }
       if(data!=null) {
         CommonComponents.saveData(

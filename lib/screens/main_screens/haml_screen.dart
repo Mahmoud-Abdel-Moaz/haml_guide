@@ -4,6 +4,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:haml_guide/config/api_keys.dart';
 import 'package:haml_guide/config/api_providers.dart';
@@ -15,6 +17,7 @@ import 'package:haml_guide/providers/screen_providers/main_screens_providers_api
 import 'package:haml_guide/screens/widgets/main_screens_widgets/haml_screen_widgets.dart';
 import 'package:riverpod_context/riverpod_context.dart';
 
+import '../../config/geolocator_service.dart';
 import '../../main.dart';
 
 class HamlScreen extends StatefulWidget {
@@ -266,11 +269,21 @@ class _HamlScreenState extends State<HamlScreen> {
             Center(
               child: ElevatedButton(
                 onPressed: () async {
+                  Position? position =await GeolocatorService.checkLocationServicesInDevice();
+                  if(position==null){
+                    return;
+                  }
+                  List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+                  if(placemarks.isEmpty||placemarks.first.country==null){
+                    return;
+                  }
+                  print('placemarks ${placemarks.first.country}');
                   HamlScreenProviders hamlDataProviders =
                       context.read(InitScreenProviders.hamlScreenProviders);
 
                   if (_formkey.currentState!=null&&_formkey.currentState!.validate()) {
                     if (Platform.isAndroid) {
+                      print('ElevatedButton 1');
                       AndroidDeviceInfo androidInfo =
                           await _deviceInfo.androidInfo;
 
@@ -303,7 +316,7 @@ class _HamlScreenState extends State<HamlScreen> {
                                           UserSelectedBirthType.hijari
                                       ? "${hamlDataProviders.yearSelected}-${hamlDataProviders.monthSelected}-${hamlDataProviders.daySelected}"
                                       : null,
-                                  fcmToken: (value??''),
+                                  fcmToken: (value??''), country: (placemarks.first.country??''),
                                 );
                             });
                       } else {
@@ -327,10 +340,12 @@ class _HamlScreenState extends State<HamlScreen> {
                                           UserSelectedBirthType.hijari
                                       ? "${hamlDataProviders.yearSelected}-${hamlDataProviders.monthSelected}-${hamlDataProviders.daySelected}"
                                       : null,
-                                  fcmToken:( value??''),
+                                  fcmToken:( value??''), country: (placemarks.first.country??''),
                                 ));
                       }
                     } else {
+                      print('ElevatedButton 2');
+
                       IosDeviceInfo iosInfo = await _deviceInfo.iosInfo;
 
                        CommonComponents.saveData(
@@ -340,10 +355,13 @@ class _HamlScreenState extends State<HamlScreen> {
                       if (await CommonComponents.getSavedData(
                               ApiKeys.deviceIdFromApi) ==
                           null) {
+                        print('ElevatedButton 3');
+
                         if (!mounted) return;
                         FirebaseMessaging.instance.getToken().then(
                             (value) async {
                               print('getDeviceData value $value');
+                              print('ElevatedButton 4');
 
                               await context
                                 .read(ApiProviders.hamlScreenProvidersApis)
@@ -363,11 +381,12 @@ class _HamlScreenState extends State<HamlScreen> {
                                           UserSelectedBirthType.hijari
                                       ? "${hamlDataProviders.yearSelected}-${hamlDataProviders.monthSelected}-${hamlDataProviders.daySelected}"
                                       : null,
-                                  fcmToken: (value??''),
+                                  fcmToken: (value??''), country: (placemarks.first.country??''),
                                 );
                             });
                       } else {
                         if (!mounted) return;
+                        print('ElevatedButton 5');
 
                         FirebaseMessaging.instance.getToken().then(
                               (value) async {
@@ -390,7 +409,7 @@ class _HamlScreenState extends State<HamlScreen> {
                                             UserSelectedBirthType.hijari
                                         ? "${hamlDataProviders.yearSelected}-${hamlDataProviders.monthSelected}-${hamlDataProviders.daySelected}"
                                         : null,
-                                    fcmToken: (value??''),
+                                    fcmToken: (value??''), country:(placemarks.first.country??''),
                                   );
                               },
                             );

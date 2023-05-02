@@ -5,10 +5,13 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:riverpod_context/riverpod_context.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../screens/main_screen.dart';
 import 'common_components.dart';
+import 'init_screen_providers.dart';
 
 
 
@@ -74,6 +77,17 @@ class LocalNotificationService {
       initializationSettings,
       onDidReceiveNotificationResponse:
           (NotificationResponse notificationResponse) async {
+        if(notificationResponse.id==500){
+          navigateToAndFinish(context, const MainScreen());
+
+        /*  Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) =>const MainScreen()),
+          );*/
+          context
+              .read(InitScreenProviders.mainScreenProviders)
+              .tabIsSelected(1);
+        }
     /*    if (notificationResponse.id == 3 || notificationResponse.id == 4) {
           navigateToAndFinish(context, const AppLayoutScreen());
           navigateTo(context, AzkarScreen());

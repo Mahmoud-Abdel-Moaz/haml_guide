@@ -54,13 +54,58 @@ class _CalculationScreenState extends State<CalculationScreen> {
               return CommonComponents.loadingDataFromServer();
             } else {
               return SingleChildScrollView(
-                padding: EdgeInsets.all(15.0.h),
+                padding: EdgeInsets.symmetric(vertical: 15.0.h,horizontal: 15.0.w),
                 physics: const BouncingScrollPhysics(),
                 child: Screenshot(
                   controller: _screenshotController,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Container(
+                        width:double.infinity,
+                        padding:EdgeInsets.symmetric(vertical: 8.h,horizontal: 8.w),
+                        decoration: BoxDecoration(
+                          color: Color(0xffF8F8F6),
+                          borderRadius: BorderRadius.circular(10.r),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                          Image.asset(
+                            "assets/images/haml_calculate.png",
+                            height: 140.0.r,
+                            width: 140.0.r,
+                            cacheHeight: (140.0.h * devicePixelRatio).round(),
+                            cacheWidth: (140.0.w * devicePixelRatio).round(),
+                          ),
+                            SizedBox(height: 8.h,),
+                            Text(
+                              "حاسبه الحمل",
+                              style: TextStyle(
+                                fontSize: 16.0.sp,
+                                color: AppColors.defaultAppColor,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            SizedBox(height: 8.h,),
+                            ElevatedButton(
+                              onPressed: (){},
+                              style: ElevatedButton.styleFrom(
+                                  textStyle: TextStyle(
+                                      fontSize: 14.0.sp, fontWeight: FontWeight.bold),
+                                  foregroundColor: Colors.white,
+                                  backgroundColor: AppColors.defaultAppColor,
+                                  minimumSize: Size(200.0.w, 40.0.h),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0.r),
+                                  )),
+                              child: const Text("action"),
+                            )
+                          ],),
+                      ),
+                      SizedBox(height: 16.h,),
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

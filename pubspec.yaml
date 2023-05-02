@@ -59,7 +59,7 @@ dependencies:
   flutter_time_picker_spinner: ^2.0.0
   google_mobile_ads: ^2.3.0
   geolocator: ^8.2.0
-  geocoding: ^2.0.5
+  geocoding: ^2.1.0
   flutter_local_notifications: ^13.0.0
   permission_handler: ^10.2.0
   flutter_native_timezone: ^2.0.0

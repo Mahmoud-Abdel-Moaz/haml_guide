@@ -14,6 +14,32 @@ import 'cache_helper.dart';
 
 AndroidDeviceInfo? androidInfo;
 
+navigateTo(context, widget, {void Function()? than}) => Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (context) => widget,
+  ),
+).then((value) => than);
+
+Future<void> navigateToAndFinish(context, widget) =>
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => widget,
+        ), (Route<dynamic> route) {
+      return false;
+    });
+
+void navigateToAndReplacement(context, widget) => Navigator.pushReplacement(
+  context,
+  MaterialPageRoute(
+    builder: (context) => widget,
+  ),
+  /*      (Route<dynamic> route){
+      return false;
+    }*/
+);
+
 class CommonComponents {
   static PreferredSizeWidget commonAppBar({required Widget title}) {
     return AppBar(

@@ -13,6 +13,7 @@ import 'package:haml_guide/config/routes.dart';
 import 'package:riverpod_context/riverpod_context.dart';
 
 import 'config/common_components.dart';
+import 'config/local_notification_service.dart';
 
 Future<void> _firebaseMessagingBackGroundHandler(RemoteMessage messages) async {
   await Firebase.initializeApp();
@@ -51,6 +52,8 @@ class HamlGuide extends StatefulWidget {
 class _HamlGuideState extends State<HamlGuide> {
   @override
   void initState() {
+    LocalNotificationService.initialize(context);
+
     context
         .read(ApiProviders.notificationHandler)
         .notificationInitialization(context);

@@ -41,7 +41,7 @@ class NotificationHandler extends ChangeNotifier {
     FlutterLocalNotificationsPlugin fltrNotification =
         FlutterLocalNotificationsPlugin();
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+   // AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
     var andoridDetails = const AndroidNotificationDetails(
       "channelId",
       "channelName",
@@ -69,9 +69,9 @@ class NotificationHandler extends ChangeNotifier {
         )
         .then((value) => pageIndex = 1);*/
 
-    await setNotification(time: DateTime.now(), id: 1, body: "تعرفي علي تفاصيل هذا الأسبوع", type: 'Week reminder', title: "انت الأن في $userWeekName", androidInfo: androidInfo,matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime).then((value) => pageIndex = 1);
+   // await setNotification(time: DateTime.now(), id: 1, body: "تعرفي علي تفاصيل هذا الأسبوع", type: 'Week reminder', title: "انت الأن في $userWeekName", androidInfo: androidInfo,matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime).then((value) => pageIndex = 1);
 
-    Timer.periodic(const Duration(days: 3), (timer) async {
+   // Timer.periodic(const Duration(days: 3), (timer) async {
    /*   await fltrNotification
           .schedule(
             0,
@@ -82,9 +82,9 @@ class NotificationHandler extends ChangeNotifier {
             androidAllowWhileIdle: true,
           )
           .then((value) => pageIndex = 0);*/
-      await setNotification(time: DateTime.now(), id: 2, body: "اختاري اسم جنينك المفضل", type: 'Baby name', title: "اسم الجنين", androidInfo: androidInfo,).then((value) => pageIndex = 0);
+    //  await setNotification(time: DateTime.now(), id: 2, body: "اختاري اسم جنينك المفضل", type: 'Baby name', title: "اسم الجنين", androidInfo: androidInfo,).then((value) => pageIndex = 0);
 
-    });
+   // });
 
   }
 

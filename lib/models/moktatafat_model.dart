@@ -1,6 +1,9 @@
+import 'moctatafat_image.dart';
+
 class MoktatafatModel {
   String? headerOne, bodyOne, headerTwo, bodyTwo;
   bool? visibility;
+  List<MoctatafatImage>? moktatafatImages;
 
   MoktatafatModel({
     this.headerOne,
@@ -8,6 +11,7 @@ class MoktatafatModel {
     this.headerTwo,
     this.bodyTwo,
     this.visibility,
+    this.moktatafatImages,
   });
 
   MoktatafatModel.fromJson(Map<String, dynamic> jsonData) {
@@ -16,5 +20,10 @@ class MoktatafatModel {
     headerTwo = jsonData['header2'];
     bodyTwo = jsonData['body2'];
     visibility = false;
+    moktatafatImages= jsonData['images']!= null
+        ? (jsonData['images'] as List)
+        .map((i) => MoctatafatImage.fromJson(i))
+        .toList()
+        : [];
   }
 }
