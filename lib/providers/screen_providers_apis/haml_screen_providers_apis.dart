@@ -14,6 +14,7 @@ import 'package:riverpod_context/riverpod_context.dart';
 
 import '../../config/cache_helper.dart';
 import '../../config/local_notification_service.dart';
+import '../../models/pin_banner.dart';
 
 class HamlScreenProvidersApis extends ChangeNotifier {
   // int deviceIDFromDataBase;
@@ -126,7 +127,7 @@ log('hamel calc $dataList');
         await CommonComponents.getSavedData(ApiKeys.deviceIdFromUser);
 
     HamlScreenModel model = HamlScreenModel(
-        deviceID: deviceID, hijariDate: hijariDate, miladyDate: miladyDate,country: country,deviceType: Platform.isIOS?'IOS':'ANDROID',status: 'online',);
+        deviceID: deviceID, hijariDate: hijariDate, miladyDate: miladyDate,country: country,deviceType: Platform.isIOS?'Ios':'Android',status: 'Online',);
 
     if (context.mounted) {
       Map<String, dynamic> data = await ApiRequests.postApiRequests(
@@ -182,7 +183,7 @@ log('hamel calc $dataList');
       hijariDate: hijariDate,
       miladyDate: miladyDate,
       deviceID: deviceIDFromUser
-      ,country: country,deviceType: Platform.isIOS?'IOS':'ANDROID',status: 'online',
+      ,country: country,deviceType: Platform.isIOS?'Ios':'Android',status: 'Online',
     );
 
     if (context.mounted) {
@@ -320,18 +321,21 @@ log('hamel calc $dataList');
       log('data HamlCalculatio $res');
       data =jsonDecode(res!);
     }else{
-      List<dynamic> d = (await ApiRequests.getApiRequests(
+      dynamic d = (await ApiRequests.getApiRequests(
         context: context,
         baseUrl: ApiKeys.baseUrl,
         apiUrl: "api/v1/devices/?device_id=$deviceID",
         headers: {},
-      ))['results'];
-      print('data $d');
+      ));
+      log('data getUserHamlCalculation $d');
       if((d==null||d.isEmpty)&&res!=null)  {
         data=jsonDecode(res!);
       }else{
-        if(data!=null&&data.isNotEmpty) {
-          data = d[0];
+        print('/////////////////////');
+        if(d!=null&&(((d is Map<String,dynamic>) && d['results'].isNotEmpty)||((d is List<dynamic>) && d.isNotEmpty))) {
+           getPinBanner(context: context);
+          log('d results ${['results'][0]}');
+          data = (d is Map<String,dynamic>)?d['results'][0]:d[0];
           print('data data $data');
         }
       }
@@ -383,5 +387,54 @@ log('hamel calc $dataList');
     }
 
     return model;
+  }
+
+  Future<PinBanner?> getPinBanner({required BuildContext context,bool cached=false})async{
+
+    String? cachedBannerResponse= CommonComponents.getSavedData(ApiKeys.binBanner,);
+    String? country= CommonComponents.getSavedData(ApiKeys.cachedCountry,);
+    if(cached){
+      if(cachedBannerResponse!=null){
+        return PinBanner.fromJson(jsonDecode(cachedBannerResponse));
+      }
+    }
+    List<dynamic>? banners = (await ApiRequests.getApiRequests(
+      context: context,
+      baseUrl: ApiKeys.baseUrl,
+      apiUrl: "api/v1/custombanners/",
+      headers: {},
+    ));
+    int userWeekNumber=CommonComponents.getSavedData(ApiKeys.userWeekNumber,);
+    log('getPinBanner $country $userWeekNumber $banners');
+  /*  country='Egypt';
+    userWeekNumber=5;*/
+    if(banners!=null&&banners.isNotEmpty){
+      PinBanner? newBanner;
+      PinBanner? cachedBanner;
+      String deviceType=Platform.isIOS?'Ios':'Android';
+      for (Map<String,dynamic> element in banners) {
+        PinBanner banner=PinBanner.fromJson(element);
+        if((banner.phoneType==null||banner.phoneType!.toLowerCase()==deviceType.toLowerCase())&&(banner.country==null||country==null||banner.country!.toLowerCase()==country.toLowerCase())&&(banner.week==null||banner.week==userWeekNumber)){
+          if(banner.status==null||banner.status!.toLowerCase()=='online'){
+            newBanner=banner;
+          }
+          if(banner.status==null||banner.status!.toLowerCase()=='offline'){
+            cachedBanner=banner;
+          }
+        }
+      }
+      if(cachedBanner!=null){
+        CommonComponents.saveData(key:ApiKeys.binBanner,value:jsonEncode(cachedBanner.toJson()) );
+      }else{
+        CommonComponents.deleteSavedData(ApiKeys.binBanner,);
+      }
+      return newBanner;
+    }else{
+      if(cachedBannerResponse!=null){
+        return PinBanner.fromJson(jsonDecode(cachedBannerResponse));
+      }else{
+        return null;
+      }
+    }
   }
 }

@@ -77,13 +77,14 @@ class LocalNotificationService {
       initializationSettings,
       onDidReceiveNotificationResponse:
           (NotificationResponse notificationResponse) async {
-        if(notificationResponse.id==500){
+        print('onDidReceiveNotificationResponse ${notificationResponse.id}');
+        if(notificationResponse.id==1||notificationResponse.id==500){
           navigateToAndFinish(context, const MainScreen());
-
-        /*  Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>const MainScreen()),
-          );*/
+          context
+              .read(InitScreenProviders.mainScreenProviders)
+              .tabIsSelected(0);
+        }else if(notificationResponse.id! >= 2&&notificationResponse.id! <= 42){
+          navigateToAndFinish(context, const MainScreen());
           context
               .read(InitScreenProviders.mainScreenProviders)
               .tabIsSelected(1);

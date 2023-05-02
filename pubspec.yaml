@@ -67,11 +67,12 @@ dependencies:
   firebase_messaging: ^14.2.4
   share_plus: ^6.3.1
   in_app_review: ^2.0.6
-  
-  
+  cached_network_image: ^3.2.3
 
-  
-  
+
+
+
+
 
 dev_dependencies:
   flutter_test:

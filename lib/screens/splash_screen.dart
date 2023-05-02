@@ -17,7 +17,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-/*    LocalNotificationService.setNotification(
+    LocalNotificationService.setNotification(
       time: DateTime.now().add(const Duration(seconds: 10)),
       // id: id + 100 + before,
       id: 500,
@@ -25,7 +25,7 @@ class SplashScreen extends StatelessWidget {
       title:  "اسم الجنين",
       body: "اختاري اسم جنينك المفضل",
       withSound: true,
-      matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,);*/
+      matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,);
 
     bool babiesNameNotification=CacheHelper.getData(key: 'babies_names_notification',defaultValue: false);
     if(!babiesNameNotification){

@@ -14,6 +14,26 @@ import 'cache_helper.dart';
 
 AndroidDeviceInfo? androidInfo;
 
+launchUrlFun(String url) async {
+  final Uri uri=url.contains('https')?Uri.parse(url): Uri(scheme: 'https',host: url,);
+  // final Uri uri=Uri.parse(url) ;
+  if (!await launchUrl(
+    uri,
+    mode: LaunchMode.externalApplication,
+  )) {
+    throw 'Cant not launch url';
+  }
+}
+makeCall(String phone) async {
+  final Uri uri= Uri(scheme: 'tel',path: phone,);
+  if (!await launchUrl(
+    uri,
+    mode: LaunchMode.externalApplication,
+  )) {
+    throw 'Cant not launch url';
+  }
+}
+
 navigateTo(context, widget, {void Function()? than}) => Navigator.push(
   context,
   MaterialPageRoute(

@@ -8,4 +8,6 @@ class ApiKeys {
   static const String userWeekNumber = "UserWeekNumber";
   static const String userWeekName = "UserWeekName";
   static const String hamlCalc = "hamlCalc";
+  static const String binBanner = "bin_banner";
+  static const String cachedCountry = "cached_country";
 }

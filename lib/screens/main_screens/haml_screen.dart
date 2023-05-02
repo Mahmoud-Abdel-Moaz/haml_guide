@@ -59,6 +59,11 @@ class _HamlScreenState extends State<HamlScreen> {
                 context: context,
                 deviceID: deviceID,
               );
+           context
+              .read(ApiProviders.hamlScreenProvidersApis)
+              .getPinBanner(
+                context: context,
+              );
         }
       },
     );
@@ -273,10 +278,11 @@ class _HamlScreenState extends State<HamlScreen> {
                   if(position==null){
                     return;
                   }
-                  List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+                  List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude,localeIdentifier:'en');
                   if(placemarks.isEmpty||placemarks.first.country==null){
                     return;
                   }
+                  CommonComponents.saveData(key:ApiKeys.cachedCountry,value:(placemarks.first.country??'') );
                   print('placemarks ${placemarks.first.country}');
                   HamlScreenProviders hamlDataProviders =
                       context.read(InitScreenProviders.hamlScreenProviders);

@@ -31,7 +31,7 @@ class PinBanner {
   String? image;
   String? url;
   String? buttonText;
-  dynamic text;
+  String? text;
   String? phoneType;
   String? status;
   String? country;
