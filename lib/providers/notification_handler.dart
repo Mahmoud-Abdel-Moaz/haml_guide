@@ -12,6 +12,8 @@ import 'package:riverpod_context/riverpod_context.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../screens/main_screen.dart';
+
 class NotificationHandler extends ChangeNotifier {
   int pageIndex = 0;
   bool navigateToAlarmScreen = false;
@@ -32,7 +34,7 @@ class NotificationHandler extends ChangeNotifier {
     fltrNotification.initialize(
       initalizationSettings,
       onDidReceiveNotificationResponse: (notificationResponse) {
-        flutterNotificationSelected(payLoad: "payLoad", context: context);
+        flutterNotificationSelected(payLoad: "payLoad", context: context,notificationResponse:notificationResponse);
       },
     );
   }
@@ -171,11 +173,24 @@ class NotificationHandler extends ChangeNotifier {
   void flutterNotificationSelected({
     required String payLoad,
     required BuildContext context,
+    required NotificationResponse notificationResponse,
   }) {
     if (!navigateToAlarmScreen) {
-      context
+      if(notificationResponse.id==1){
+      //  navigateToAndFinish(context, const MainScreen(startIndex: 0,));
+        context
+            .read(InitScreenProviders.mainScreenProviders)
+            .tabIsSelected(0);
+
+      }else if((notificationResponse.id! >= 2&&notificationResponse.id! <= 42)){
+      //  navigateToAndFinish(context, const MainScreen(startIndex: 1,));
+         context
           .read(InitScreenProviders.mainScreenProviders)
-          .tabIsSelected(pageIndex);
+          .tabIsSelected(1);
+      }
+     /* context
+          .read(InitScreenProviders.mainScreenProviders)
+          .tabIsSelected(pageIndex);*/
     } else {
       Navigator.pushNamed(context, PATHS.mainAlarmScreen);
     }

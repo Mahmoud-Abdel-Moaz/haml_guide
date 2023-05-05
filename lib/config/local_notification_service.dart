@@ -107,9 +107,7 @@ class LocalNotificationService {
       String title = 'Prayer Time',
       bool withSound = true,
       DateTimeComponents? matchDateTimeComponents,}) async {
-    if (body == lastType) {
-      return;
-    }
+
     lastType = body;
     print(
         'setNotification ${time.toString()} $id $body $title $withSound ');

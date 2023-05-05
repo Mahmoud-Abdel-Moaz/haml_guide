@@ -87,29 +87,29 @@ class _CalculationScreenState extends State<CalculationScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Image.network(
-                                    pinBanner.data?.image??'',
-                                    height: 140.0.r,
-                                    width: 140.0.r,
-                                    cacheHeight: (140.0.h * devicePixelRatio).round(),
-                                    cacheWidth: (140.0.w * devicePixelRatio).round(),
-                                  ),
+                                  if( pinBanner.data?.image!=null)
                                   CachedNetworkImage(imageUrl: pinBanner.data?.image??'',
                                     height: 140.0.r,
                                     width: 140.0.r,
                                     errorWidget: (context, url, error) => Image.asset('assets/images/default_image.png',   height: 140.0.r,
                                       width: 140.0.r,),
                                   ),
-                                  SizedBox(height: 8.h,),
-                                  Text(
+                                  if( pinBanner.data?.image!=null)
+                                    SizedBox(height: 8.h,),
+                                  if( pinBanner.data?.text!=null)
+                                    Text(
                                     pinBanner.data?.text??'',
                                     style: TextStyle(
                                       fontSize: 16.0.sp,
                                       color: AppColors.defaultAppColor,
                                       fontWeight: FontWeight.w700,
                                     ),
+                                      textScaleFactor: 1,
+                                      textAlign: TextAlign.center,
                                   ),
-                                  SizedBox(height: 8.h,),
+                                  if( pinBanner.data?.text!=null)
+                                    SizedBox(height: 8.h,),
+                                  if(pinBanner.data?.buttonText!=null)
                                   ElevatedButton(
                                     onPressed: (){
                                       if(pinBanner.data?.url!=null) {

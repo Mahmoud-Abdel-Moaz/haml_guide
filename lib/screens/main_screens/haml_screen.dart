@@ -290,6 +290,9 @@ class _HamlScreenState extends State<HamlScreen> {
                   if (_formkey.currentState!=null&&_formkey.currentState!.validate()) {
                     if (Platform.isAndroid) {
                       print('ElevatedButton 1');
+                      CommonComponents.saveData(
+                          key: ApiKeys.weekNotification,
+                          value: true);
                       AndroidDeviceInfo androidInfo =
                           await _deviceInfo.androidInfo;
 
@@ -351,7 +354,9 @@ class _HamlScreenState extends State<HamlScreen> {
                       }
                     } else {
                       print('ElevatedButton 2');
-
+                      CommonComponents.saveData(
+                          key: ApiKeys.weekNotification,
+                          value: true);
                       IosDeviceInfo iosInfo = await _deviceInfo.iosInfo;
 
                        CommonComponents.saveData(
@@ -368,7 +373,9 @@ class _HamlScreenState extends State<HamlScreen> {
                             (value) async {
                               print('getDeviceData value $value');
                               print('ElevatedButton 4');
-
+                              CommonComponents.saveData(
+                                  key: ApiKeys.weekNotification,
+                                  value: true);
                               await context
                                 .read(ApiProviders.hamlScreenProvidersApis)
                                 .getDeviceData(

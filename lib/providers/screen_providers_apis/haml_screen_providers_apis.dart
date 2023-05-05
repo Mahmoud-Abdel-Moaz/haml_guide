@@ -198,7 +198,9 @@ log('hamel calc $dataList');
         body: json.encode(model.toJsonWithUpdate(fcmToken)),
       );
       log('hamel calc 2 $data');
-      setWeeksRemainderNotification(data);
+      if((CommonComponents.getSavedData(ApiKeys.weekNotification)??false)) {
+        setWeeksRemainderNotification(data);
+      }
       CommonComponents.saveData(
           key: ApiKeys.hamlCalc, value: jsonEncode(data));
 
@@ -278,7 +280,9 @@ log('hamel calc $dataList');
 
   Future<void> _weeksRemainderNotification(Map<String, dynamic> data) async {
     print("test notification _weeksRemainderNotification");
-
+    CommonComponents.saveData(
+        key: ApiKeys.weekNotification,
+        value: false);
     int babiesNamesNotificationId = 1;
     LocalNotificationService.cancelNotificationById(babiesNamesNotificationId);
     DateTime currentTime = DateTime.now();

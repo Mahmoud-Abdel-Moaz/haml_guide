@@ -9,13 +9,24 @@ import 'package:haml_guide/screens/drawer_screen.dart';
 import 'package:riverpod_context/riverpod_context.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  final int? startIndex;
+  const MainScreen({Key? key, this.startIndex}) : super(key: key);
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
+
+  @override
+  void initState() {
+    if(widget.startIndex!=null){
+      context
+          .read(InitScreenProviders.mainScreenProviders)
+          .tabIsSelected(widget.startIndex!);
+    }
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     double devicePixelRatio = MediaQuery.of(context).devicePixelRatio;

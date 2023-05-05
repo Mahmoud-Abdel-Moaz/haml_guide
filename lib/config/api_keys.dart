@@ -10,4 +10,5 @@ class ApiKeys {
   static const String hamlCalc = "hamlCalc";
   static const String binBanner = "bin_banner";
   static const String cachedCountry = "cached_country";
+  static const String weekNotification = "week_notification";
 }
