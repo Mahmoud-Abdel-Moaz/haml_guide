@@ -33,7 +33,8 @@ class _FullScreenImageScreenState extends State<FullScreenImageScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(backgroundColor: Colors.transparent,elevation: 0,
-     // title: GestureDetector(onTap: ()=>Navigator.of(context).pop(),child: Icon(Icons.arrow_back_ios,color: Colors.white,size: 24.r,),),
+     title: GestureDetector(onTap: ()=>Navigator.of(context).pop(),child: Icon(Icons.arrow_back_ios,color: Colors.white,size: 20.r,),),
+          automaticallyImplyLeading: false,
         ),
       body:  PageView.builder(
         onPageChanged: (index) {

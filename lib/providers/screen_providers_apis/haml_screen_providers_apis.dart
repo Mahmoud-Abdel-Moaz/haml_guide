@@ -35,16 +35,22 @@ class HamlScreenProvidersApis extends ChangeNotifier {
         await CommonComponents.getSavedData(ApiKeys.deviceIdFromUser);
 
     if (context.mounted) {
-      Map<String, dynamic> dataList = await ApiRequests.getApiRequests(
+      dynamic d = await ApiRequests.getApiRequests(
         context: context,
         baseUrl: ApiKeys.baseUrl,
         apiUrl: "api/v1/devices?device_id=$deviceID",
         headers: {},
       );
       bool deviceIdIsFoundInDataBase = false;
-log('hamel calc $dataList');
-      if (dataList != null) {
-        if (dataList['results'].isNotEmpty) {
+log('hamel calc $d');
+      if (d != null) {
+        if ((d is Map<String, dynamic> && d['results'].isNotEmpty)||(d is List<dynamic> && d.isNotEmpty)) {
+          dynamic dataList;
+          if((d is Map<String, dynamic>)){
+            dataList=d['results'];
+          }else{
+            dataList=d;
+          }
           for (int i = 0; i < dataList.length; i++) {
             if (dataList[i]['device_id'] == deviceID) {
               deviceIdIsFoundInDataBase = true;

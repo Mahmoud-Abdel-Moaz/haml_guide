@@ -213,13 +213,13 @@ class NotificationHandler extends ChangeNotifier {
 
   Future<void> showAlarmNotification(
       {required int notificationIDS,required  String description,required  DateTime dateTime}) async {
-    const sound = "notification_sound.wav";
+    const sound = "alarm_sound.wav";
     FlutterLocalNotificationsPlugin fltrNotification =
         FlutterLocalNotificationsPlugin();
     var andoridDetails = AndroidNotificationDetails(
       "channelID1",
-      "channelName",
-      channelDescription: "Channel Description",
+      "alarm",
+      channelDescription: "alarm",
       importance: Importance.max,
       priority: Priority.high,
       playSound: true,
