@@ -129,7 +129,15 @@ class NotesScreenWidgets {
         itemCount: contentList.length,
         itemBuilder: (context, index) => InkWell(
           onTap: () {
-            Navigator.pushNamed(
+
+            navigateTo(context, HamlForwardDetailsScreen(
+              appBarTitle: appBarTitle,
+              description: (contentList[index].description??''),
+              image: image,
+              title: (contentList[index].title??''),
+            ),);
+
+           /* Navigator.pushNamed(
               context,
               PATHS.forwardHamlDetails,
               arguments: HamlForwardDetailsScreen(
@@ -138,7 +146,7 @@ class NotesScreenWidgets {
                 image: image,
                 title: (contentList[index].title??''),
               ),
-            );
+            );*/
           },
           child: Container(
             padding: EdgeInsets.all(10.0.h),

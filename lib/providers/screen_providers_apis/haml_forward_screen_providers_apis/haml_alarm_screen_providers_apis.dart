@@ -66,15 +66,20 @@ class HamlAlarmScreenProviders extends ChangeNotifier {
     }
     for (int i = 0; i < hamlAlarmsList.length; i++) {
       if (context.mounted) {
-        context.read(ApiProviders.notificationHandler).setAlarmNotificationList(
-              description: (hamlAlarmsList[i].description??''),
-              dateTimeIso: (hamlAlarmsList[i].alarmDateAndTime??''),
-            );
-        context.read(ApiProviders.notificationHandler).showAlarmNotification(
-              description: (hamlAlarmsList[i].description??''),
-              dateTime: DateTime.parse((hamlAlarmsList[i].alarmDateAndTime??'')),
-              notificationIDS: i,
-            );
+        DateTime? alarmTime=DateTime.tryParse((hamlAlarmsList[i].alarmDateAndTime??''));
+        if(alarmTime!=null&&alarmTime.isAfter(DateTime.now())){
+          context.read(ApiProviders.notificationHandler)
+              .setAlarmNotificationList(
+            description: (hamlAlarmsList[i].description ?? ''),
+            dateTimeIso: (hamlAlarmsList[i].alarmDateAndTime ?? ''),
+          );
+          context.read(ApiProviders.notificationHandler).showAlarmNotification(
+            description: (hamlAlarmsList[i].description ?? ''),
+            dateTime: DateTime.parse(
+                (hamlAlarmsList[i].alarmDateAndTime ?? '')),
+            notificationIDS: i,
+          );
+        }
       } else {
         return null;
       }

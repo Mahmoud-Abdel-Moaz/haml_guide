@@ -15,6 +15,8 @@ class WeightScreenWidgets {
     required String appBarTitle,
     required String image,
   }) {
+    print('WeightScreenWidgets ${appBarTitle} ${image}');
+
     return Expanded(
       child: ListView.separated(
         physics: const BouncingScrollPhysics(),
@@ -22,7 +24,15 @@ class WeightScreenWidgets {
         itemCount: contentList.length,
         itemBuilder: (context, index) => InkWell(
           onTap: () {
-            Navigator.pushNamed(
+            print('click WeightScreenWidgets ');
+           navigateTo(context, HamlForwardDetailsScreen(
+             appBarTitle: appBarTitle,
+             description: (contentList[index].description??''),
+             image: image,
+             title:
+             " معدل الزيادة الحالي هو ${double.parse((contentList[index].weightNow??'0')) - double.parse((contentList[index].weightBefore??'0'))}",
+           ));
+            /*Navigator.pushNamed(
               context,
               PATHS.forwardHamlDetails,
               arguments: HamlForwardDetailsScreen(
@@ -32,7 +42,7 @@ class WeightScreenWidgets {
                 title:
                     " معدل الزيادة الحالي هو ${double.parse((contentList[index].weightNow??'0')) - double.parse((contentList[index].weightBefore??'0'))}",
               ),
-            );
+            );*/
           },
           child: Container(
             padding: EdgeInsets.all(10.0.h),

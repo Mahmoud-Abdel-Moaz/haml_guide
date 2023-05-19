@@ -13,6 +13,8 @@ import 'package:haml_guide/screens/widgets/main_screens_widgets/weeks_screen_wid
 import 'package:riverpod_context/riverpod_context.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
+import '../../config/cache_helper.dart';
+
 class WeeksScreen extends StatefulWidget {
   const WeeksScreen({Key? key}) : super(key: key);
 
@@ -47,7 +49,9 @@ class _WeeksScreenState extends State<WeeksScreen> {
 
   @override
   void initState() {
-   // CommonComponents.createIntersitial(_interstitialAd);
+    CacheHelper.saveData(key: 'start_index', value: 2);
+
+    // CommonComponents.createIntersitial(_interstitialAd);
 
     Future.delayed(Duration.zero, () async {
       int userWeekNumber =
@@ -230,9 +234,24 @@ class _WeeksScreenState extends State<WeeksScreen> {
                                 itemCount: bannersCustom.length,
                                 itemBuilder: (context, bannerIndex) => InkWell(
                                       onTap: () async {
-                                        await CommonComponents.launchOnBrowser(
+                                        /*await CommonComponents.launchOnBrowser(
                                             url: bannersCustom[bannerIndex].url,
-                                            context: context);
+                                            context: context);*/
+                                        if(bannersCustom[
+                                        bannerIndex]
+                                            .url!=null) {
+                                          if(bannersCustom[
+                                          bannerIndex]
+                                              .url!.toLowerCase().startsWith('tel:')){
+                                            makeCall(bannersCustom[
+                                            bannerIndex]
+                                                .url!.toLowerCase().replaceFirst('tel:', ''));
+                                          }else{
+                                            launchUrlFun(bannersCustom[
+                                            bannerIndex]
+                                                .url!);
+                                          }
+                                        }
                                       },
                                       child: Image.network(
                                         bannersCustom[bannerIndex].image??'',

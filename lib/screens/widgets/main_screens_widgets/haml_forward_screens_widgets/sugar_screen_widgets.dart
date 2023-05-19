@@ -148,7 +148,13 @@ class SugarScreenWidgets {
         itemCount: contentList.length,
         itemBuilder: (context, index) => InkWell(
           onTap: () {
-            Navigator.pushNamed(
+
+            navigateTo(context, HamlForwardDetailsScreen(
+              appBarTitle: appBarTitle,
+              description: (contentList[index].description??''),
+              image: image,
+              title: "قياس السكر الحالي هو ${contentList[index].sugarNumber}", ));
+        /*    Navigator.pushNamed(
               context,
               PATHS.forwardHamlDetails,
               arguments: HamlForwardDetailsScreen(
@@ -157,7 +163,7 @@ class SugarScreenWidgets {
                 image: image,
                 title: "قياس السكر الحالي هو ${contentList[index].sugarNumber}",
               ),
-            );
+            );*/
           },
           child: Container(
             padding: EdgeInsets.all(10.0.h),

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../config/cache_helper.dart';
 import '../../models/moctatafat_image.dart';
 
 
@@ -25,6 +26,8 @@ class _FullScreenImageScreenState extends State<FullScreenImageScreen> {
 
   @override
   void initState() {
+    CacheHelper.saveData(key: 'start_index', value: 2);
+
     currentIndex=widget.index;
     super.initState();
   }

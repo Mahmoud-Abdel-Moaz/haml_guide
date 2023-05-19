@@ -40,6 +40,11 @@ class DrawerScreenProviders extends ChangeNotifier {
       "destination": const SizedBox()
     },
     {
+      "image": "assets/images/drawer/contacts.png",
+      "title": "المصادر",
+      "destination": PATHS.sourcesScreen
+    },
+    {
       "image": "assets/images/drawer/share.png",
       "title": "شارك التطبيق",
       "destination": const SizedBox()

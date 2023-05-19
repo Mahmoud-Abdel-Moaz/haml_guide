@@ -208,7 +208,15 @@ class AlarmScreenWidgets {
         itemCount: contentList.length,
         itemBuilder: (context, index) => InkWell(
           onTap: () {
-            Navigator.pushNamed(
+
+            navigateTo(context, HamlForwardDetailsScreen(
+              appBarTitle: appBarTitle,
+              description: contentList[index].description??'',
+              image: image,
+              title: "المنبة",
+            ),);
+
+            /*Navigator.pushNamed(
               context,
               PATHS.forwardHamlDetails,
               arguments: HamlForwardDetailsScreen(
@@ -217,7 +225,7 @@ class AlarmScreenWidgets {
                 image: image,
                 title: "المنبة",
               ),
-            );
+            );*/
           },
           child: Container(
             padding: EdgeInsets.all(10.0.h),

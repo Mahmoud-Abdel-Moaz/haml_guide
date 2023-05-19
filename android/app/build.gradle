@@ -46,8 +46,15 @@ android {
         jvmTarget = '1.8'
     }
 
-    sourceSets {
+   /* sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+    }*/
+    sourceSets {
+        main {
+            res.srcDirs = ['src/main/res', 'src/main/res/raw']
+        }
+        main.java.srcDirs += 'src/main/kotlin'
+
     }
 
     defaultConfig {

@@ -23,7 +23,13 @@ class KicksScreenWidgets {
         itemCount: kicksContentList.length,
         itemBuilder: (context, index) => InkWell(
           onTap: () {
-            Navigator.pushNamed(
+            navigateTo(context, HamlForwardDetailsScreen(
+              appBarTitle: appBarTitle,
+              description: (kicksContentList[index].description??''),
+              image: image,
+              title: "ركلات الجنين هو ${kicksContentList[index].kickCount}",
+            ));
+          /*  Navigator.pushNamed(
               context,
               PATHS.forwardHamlDetails,
               arguments: HamlForwardDetailsScreen(
@@ -32,7 +38,7 @@ class KicksScreenWidgets {
                 image: image,
                 title: "ركلات الجنين هو ${kicksContentList[index].kickCount}",
               ),
-            );
+            );*/
           },
           child: Container(
             padding: EdgeInsets.all(10.0.h),

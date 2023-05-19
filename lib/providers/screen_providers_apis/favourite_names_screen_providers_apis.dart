@@ -44,7 +44,7 @@ class FavouriteNamesScreenProvidersApis extends ChangeNotifier {
         headers: {},
       );
 
-      if (dataList.containsKey('id')) {
+      if (dataList!=null&&dataList.containsKey('id')) {
         for (var data in dataList['favourites']) {
           namesFavList.add(NamesModel.fromjson(jsonData: data, isFav: true));
         }

@@ -11,6 +11,7 @@ import 'package:haml_guide/models/banner_custom_model.dart';
 import 'package:haml_guide/models/moktatafat_model.dart';
 import 'package:riverpod_context/riverpod_context.dart';
 
+import '../../config/cache_helper.dart';
 import 'full_screen_image.dart';
 
 class MoktatfatScreen extends StatefulWidget {
@@ -47,6 +48,8 @@ class _MoktatfatScreenState extends State<MoktatfatScreen> {
 
   @override
   void initState() {
+    CacheHelper.saveData(key: 'start_index', value: 2);
+
     context.refresh(ApiProviders.userLocationProviders);
 
     Future.delayed(
@@ -135,13 +138,28 @@ class _MoktatfatScreenState extends State<MoktatfatScreen> {
                                                           bannerIndex) =>
                                                       InkWell(
                                                         onTap: () async {
-                                                          await CommonComponents
+                                                         /* await CommonComponents
                                                               .launchOnBrowser(
                                                                   url: bannerCustom[
                                                                           bannerIndex]
                                                                       .url,
                                                                   context:
-                                                                      context);
+                                                                      context);*/
+                                                          if(bannerCustom[
+                                                          bannerIndex]
+                                                              .url!=null) {
+                                                            if(bannerCustom[
+                                                            bannerIndex]
+                                                                .url!.toLowerCase().startsWith('tel:')){
+                                                              makeCall(bannerCustom[
+                                                              bannerIndex]
+                                                                  .url!.toLowerCase().replaceFirst('tel:', ''));
+                                                            }else{
+                                                              launchUrlFun(bannerCustom[
+                                                              bannerIndex]
+                                                                  .url!);
+                                                            }
+                                                          }
                                                         },
                                                         child: Image.network(
                                                           bannerCustom[

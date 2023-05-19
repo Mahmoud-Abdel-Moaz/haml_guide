@@ -5,7 +5,7 @@ import 'package:haml_guide/config/app_colors.dart';
 import 'package:haml_guide/config/common_components.dart';
 import 'package:haml_guide/models/social_media_model.dart';
 import 'package:riverpod_context/riverpod_context.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 
 class DrawerScreenWidgets {
   static Future<dynamic> contactUsWidget({

@@ -16,16 +16,8 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LocalNotificationService.triggeringTheLaunch(context);
 
-   /* LocalNotificationService.setNotification(
-      time: DateTime.now().add(const Duration(seconds: 10)),
-      // id: id + 100 + before,
-      id: 500,
-      type: 'Baby name',
-      title:  "اسم الجنين",
-      body: "اختاري اسم جنينك المفضل",
-      withSound: true,
-      matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,);*/
 
     bool babiesNameNotification=CacheHelper.getData(key: 'babies_names_notification',defaultValue: false);
     if(!babiesNameNotification){
@@ -40,11 +32,13 @@ class SplashScreen extends StatelessWidget {
           animationDuration: const Duration(seconds: 1),
           curve: Curves.bounceOut,
           splashTransition: SplashTransition.scaleTransition,
-          nextScreen: const MainScreen(),
+          nextScreen:  MainScreen(startIndex: CacheHelper.getData(key: 'start_index', defaultValue: 2)!,),
         ),
       ),
     );
   }
+
+
 
   setBabiesNameNotification()async{
     PermissionStatus notificationStatus = await Permission.notification.status;

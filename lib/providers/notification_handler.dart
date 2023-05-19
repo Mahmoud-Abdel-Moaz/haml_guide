@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:haml_guide/config/api_keys.dart';
+import 'package:haml_guide/config/cache_helper.dart';
 import 'package:haml_guide/config/common_components.dart';
 import 'package:haml_guide/config/init_screen_providers.dart';
 import 'package:haml_guide/config/routes.dart';
@@ -16,12 +18,13 @@ import '../screens/main_screen.dart';
 
 class NotificationHandler extends ChangeNotifier {
   int pageIndex = 0;
-  bool navigateToAlarmScreen = false;
+  static BuildContext? currentContext;
+  static bool navigateToAlarmScreen = false;
   List<Map<String, dynamic>> alarmNotifications = [];
 
   void notificationInitialization(BuildContext context) {
     FlutterLocalNotificationsPlugin fltrNotification;
-
+    currentContext=context;
     AndroidInitializationSettings androidInitialize =
         const AndroidInitializationSettings('app_icon');
 
@@ -34,16 +37,71 @@ class NotificationHandler extends ChangeNotifier {
     fltrNotification.initialize(
       initalizationSettings,
       onDidReceiveNotificationResponse: (notificationResponse) {
-        flutterNotificationSelected(payLoad: "payLoad", context: context,notificationResponse:notificationResponse);
+        flutterNotificationSelected(
+            payLoad: "payLoad",
+            context: context,
+            notificationResponse: notificationResponse);
       },
+      onDidReceiveBackgroundNotificationResponse:notificationTapBackground,
     );
+
+  }
+  @pragma('vm:entry-point')
+ static void notificationTapBackground(NotificationResponse notificationResponse) {
+   /* flutterNotificationSelected(
+        payLoad: "payLoad",
+        context: context,
+        notificationResponse: notificationResponse);*/
+    log('notificationTapBackground ${notificationResponse.id} ${notificationResponse.notificationResponseType}');
+    print('notificationTapBackground  ${notificationResponse.id} ${notificationResponse.notificationResponseType}');
+   /* if(currentContext!=null){
+      if (!navigateToAlarmScreen) {
+        if (notificationResponse.id == 1 || notificationResponse.id == 500) {
+          //  navigateToAndFinish(context, const MainScreen(startIndex: 0,));
+         *//* Navigator.pushNamedAndRemoveUntil(
+              currentContext!, PATHS.mainScreen, (Route<dynamic> route) => false);*//*
+
+          currentContext!.read(InitScreenProviders.mainScreenProviders).tabIsSelected(0);
+        } else if ((notificationResponse.id! >= 2 &&
+            notificationResponse.id! <= 42)) {
+          //  navigateToAndFinish(context, const MainScreen(startIndex: 1,));
+          Navigator.pushNamedAndRemoveUntil(
+              currentContext!, PATHS.mainScreen, (Route<dynamic> route) => false);
+
+          currentContext!.read(InitScreenProviders.mainScreenProviders).tabIsSelected(1);
+        }
+        *//* context
+          .read(InitScreenProviders.mainScreenProviders)
+          .tabIsSelected(pageIndex);*//*
+      } else {
+        Navigator.pushNamed(currentContext!, PATHS.mainAlarmScreen);
+      }
+    }else {
+      if (!navigateToAlarmScreen) {
+        if (notificationResponse.id == 1 || notificationResponse.id == 500) {
+          log('notificationTapBackground 1');
+          print('notificationTapBackground 1');
+          showToast(msg: 'baby notification ', state: ToastStates.ERROR);
+          CacheHelper.saveData(key: 'start_index', value: 0);
+        } else if ((notificationResponse.id! >= 2 &&
+            notificationResponse.id! <= 42)) {
+          log('notificationTapBackground 2');
+          print('notificationTapBackground 2');
+          showToast(msg: 'baby notification ', state: ToastStates.SUCCESS);
+          CacheHelper.saveData(key: 'start_index', value: 1);
+        }
+
+      } else {
+      }
+    }*/
+
   }
 
   Future showNotification() async {
     FlutterLocalNotificationsPlugin fltrNotification =
         FlutterLocalNotificationsPlugin();
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-   // AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    // AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
     var andoridDetails = const AndroidNotificationDetails(
       "channelId",
       "channelName",
@@ -60,7 +118,7 @@ class NotificationHandler extends ChangeNotifier {
     String userWeekName =
         await CommonComponents.getSavedData(ApiKeys.userWeekName);
 
- /*   await fltrNotification
+    /*   await fltrNotification
         .periodicallyShow(
           1,
           "انت الأن في $userWeekName",
@@ -71,10 +129,10 @@ class NotificationHandler extends ChangeNotifier {
         )
         .then((value) => pageIndex = 1);*/
 
-   // await setNotification(time: DateTime.now(), id: 1, body: "تعرفي علي تفاصيل هذا الأسبوع", type: 'Week reminder', title: "انت الأن في $userWeekName", androidInfo: androidInfo,matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime).then((value) => pageIndex = 1);
+    // await setNotification(time: DateTime.now(), id: 1, body: "تعرفي علي تفاصيل هذا الأسبوع", type: 'Week reminder', title: "انت الأن في $userWeekName", androidInfo: androidInfo,matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime).then((value) => pageIndex = 1);
 
-   // Timer.periodic(const Duration(days: 3), (timer) async {
-   /*   await fltrNotification
+    // Timer.periodic(const Duration(days: 3), (timer) async {
+    /*   await fltrNotification
           .schedule(
             0,
             "اسم الجنين",
@@ -86,23 +144,22 @@ class NotificationHandler extends ChangeNotifier {
           .then((value) => pageIndex = 0);*/
     //  await setNotification(time: DateTime.now(), id: 2, body: "اختاري اسم جنينك المفضل", type: 'Baby name', title: "اسم الجنين", androidInfo: androidInfo,).then((value) => pageIndex = 0);
 
-   // });
-
+    // });
   }
 
-  Future<void>  setNotification(
-      {required DateTime time,
-        required int id,
-        required String body,
-        required String type,
-        required String title,
-        required AndroidDeviceInfo androidInfo,
-        bool withSound = true,
-        DateTimeComponents? matchDateTimeComponents,}) async {
+  Future<void> setNotification({
+    required DateTime time,
+    required int id,
+    required String body,
+    required String type,
+    required String title,
+    required AndroidDeviceInfo androidInfo,
+    bool withSound = true,
+    DateTimeComponents? matchDateTimeComponents,
+  }) async {
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-    print(
-        'setNotification ${time.toString()} $id $body $title $withSound ');
+        FlutterLocalNotificationsPlugin();
+    print('setNotification ${time.toString()} $id $body $title $withSound ');
     Int64List vibrationPattern = Int64List(4);
     vibrationPattern[0] = 0;
     vibrationPattern[1] = 1000;
@@ -145,10 +202,11 @@ class NotificationHandler extends ChangeNotifier {
       DateTime time,
       bool withSound,
       Int64List vibrationPattern,
-      DateTimeComponents? matchDateTimeComponents,String type) async {
+      DateTimeComponents? matchDateTimeComponents,
+      String type) async {
     tz.initializeTimeZones();
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+        FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin.zonedSchedule(
         id,
         title,
@@ -167,7 +225,7 @@ class NotificationHandler extends ChangeNotifier {
         payload: body,
         matchDateTimeComponents: matchDateTimeComponents,
         uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.absoluteTime);
+            UILocalNotificationDateInterpretation.absoluteTime);
   }
 
   void flutterNotificationSelected({
@@ -176,19 +234,21 @@ class NotificationHandler extends ChangeNotifier {
     required NotificationResponse notificationResponse,
   }) {
     if (!navigateToAlarmScreen) {
-      if(notificationResponse.id==1){
-      //  navigateToAndFinish(context, const MainScreen(startIndex: 0,));
-        context
-            .read(InitScreenProviders.mainScreenProviders)
-            .tabIsSelected(0);
+      if (notificationResponse.id == 1 || notificationResponse.id == 500) {
+        //  navigateToAndFinish(context, const MainScreen(startIndex: 0,));
+        Navigator.pushNamedAndRemoveUntil(
+            context, PATHS.mainScreen, (Route<dynamic> route) => false);
 
-      }else if((notificationResponse.id! >= 2&&notificationResponse.id! <= 42)){
-      //  navigateToAndFinish(context, const MainScreen(startIndex: 1,));
-         context
-          .read(InitScreenProviders.mainScreenProviders)
-          .tabIsSelected(1);
+        context.read(InitScreenProviders.mainScreenProviders).tabIsSelected(0);
+      } else if ((notificationResponse.id! >= 2 &&
+          notificationResponse.id! <= 42)) {
+        //  navigateToAndFinish(context, const MainScreen(startIndex: 1,));
+        Navigator.pushNamedAndRemoveUntil(
+            context, PATHS.mainScreen, (Route<dynamic> route) => false);
+
+        context.read(InitScreenProviders.mainScreenProviders).tabIsSelected(1);
       }
-     /* context
+      /* context
           .read(InitScreenProviders.mainScreenProviders)
           .tabIsSelected(pageIndex);*/
     } else {
@@ -212,7 +272,9 @@ class NotificationHandler extends ChangeNotifier {
   }
 
   Future<void> showAlarmNotification(
-      {required int notificationIDS,required  String description,required  DateTime dateTime}) async {
+      {required int notificationIDS,
+      required String description,
+      required DateTime dateTime}) async {
     const sound = "alarm_sound.wav";
     FlutterLocalNotificationsPlugin fltrNotification =
         FlutterLocalNotificationsPlugin();
@@ -234,7 +296,7 @@ class NotificationHandler extends ChangeNotifier {
     // for (int i = 0; i < alarmNotifications.length; i++) {
     await fltrNotification
         .schedule(
-          notificationIDS??0,
+          notificationIDS ?? 0,
           "المنبة",
           description,
           dateTime,
@@ -244,5 +306,5 @@ class NotificationHandler extends ChangeNotifier {
         .then((value) => navigateToAlarmScreen = true);
     // notifyListeners();
   }
-  // }
+// }
 }

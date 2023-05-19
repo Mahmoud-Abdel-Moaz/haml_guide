@@ -6,8 +6,10 @@ import 'package:haml_guide/screens/main_screens/haml_screen.dart';
 import 'package:haml_guide/screens/main_screens/moktatafat_screen.dart';
 import 'package:haml_guide/screens/main_screens/weeks_screen.dart';
 
+import '../../config/cache_helper.dart';
+
 class MainScreenProviders extends ChangeNotifier {
-  int tabIndexSelected = 2;
+  int tabIndexSelected =  CacheHelper.getData(key: 'start_index', defaultValue: 2);
 
   List<Map<String, dynamic>> bottomBarList = [
     {

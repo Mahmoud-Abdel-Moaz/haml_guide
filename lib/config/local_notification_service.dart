@@ -1,4 +1,5 @@
 // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -10,6 +11,7 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../screens/main_screen.dart';
+import 'cache_helper.dart';
 import 'common_components.dart';
 import 'init_screen_providers.dart';
 
@@ -36,6 +38,33 @@ class LocalNotificationService {
           badge: true,
           sound: true,
         );
+  }
+
+  static triggeringTheLaunch (BuildContext context)async{
+    final NotificationAppLaunchDetails? notificationAppLaunchDetails =
+    await _flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+    if(notificationAppLaunchDetails!=null){
+     if(notificationAppLaunchDetails.didNotificationLaunchApp){
+       print('notificationAppLaunchDetails done');
+       if(notificationAppLaunchDetails.notificationResponse!=null){
+         final notificationResponse=notificationAppLaunchDetails.notificationResponse!;
+         if(notificationResponse.id==1){
+           //   navigateToAndFinish(context, const MainScreen());
+           print('notificationAppLaunchDetails done 0');
+           context
+               .read(InitScreenProviders.mainScreenProviders)
+               .tabIsSelected(0);
+         }else if((notificationResponse.id! >= 2&&notificationResponse.id! <= 42)){
+           //   navigateToAndFinish(context, const MainScreen());
+           print('notificationAppLaunchDetails done 1');
+           context
+               .read(InitScreenProviders.mainScreenProviders)
+               .tabIsSelected(1);
+         }
+       }
+     }
+
+  }
   }
 
   static void initialize(BuildContext context) {
@@ -66,6 +95,8 @@ class LocalNotificationService {
       );
     }
 
+
+
     final DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
             onDidReceiveLocalNotification: onDidReceiveLocalNotification);
@@ -78,13 +109,13 @@ class LocalNotificationService {
       onDidReceiveNotificationResponse:
           (NotificationResponse notificationResponse) async {
         print('onDidReceiveNotificationResponse ${notificationResponse.id}');
-        if(notificationResponse.id==1||notificationResponse.id==500){
-          navigateToAndFinish(context, const MainScreen());
+        if(notificationResponse.id==1){
+       //   navigateToAndFinish(context, const MainScreen());
           context
               .read(InitScreenProviders.mainScreenProviders)
               .tabIsSelected(0);
         }else if(notificationResponse.id! >= 2&&notificationResponse.id! <= 42){
-          navigateToAndFinish(context, const MainScreen());
+       //   navigateToAndFinish(context, const MainScreen());
           context
               .read(InitScreenProviders.mainScreenProviders)
               .tabIsSelected(1);
@@ -96,7 +127,30 @@ class LocalNotificationService {
           navigateToAndFinish(context, const AppLayoutScreen());
         }*/
       },
+      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
     );
+  }
+  @pragma('vm:entry-point')
+  static void notificationTapBackground(NotificationResponse notificationResponse) {
+    /* flutterNotificationSelected(
+        payLoad: "payLoad",
+        context: context,
+        notificationResponse: notificationResponse);*/
+    log('notificationTapBackground ${notificationResponse.id} ${notificationResponse.notificationResponseType}');
+    print('notificationTapBackground ${notificationResponse.id} ${notificationResponse.notificationResponseType}');
+    /*if (notificationResponse.id == 1 || notificationResponse.id == 500) {
+      log('notificationTapBackground 1');
+      print('notificationTapBackground 1');
+      showToast(msg: 'baby notification ', state: ToastStates.ERROR);
+      CacheHelper.saveData(key: 'start_index', value: 0);
+    } else if ((notificationResponse.id! >= 2 &&
+        notificationResponse.id! <= 42)) {
+      log('notificationTapBackground 2');
+      print('notificationTapBackground 2');
+      showToast(msg: 'baby notification ', state: ToastStates.SUCCESS);
+      CacheHelper.saveData(key: 'start_index', value: 1);
+    }*/
+
   }
   static String? lastType;
   static setNotification(

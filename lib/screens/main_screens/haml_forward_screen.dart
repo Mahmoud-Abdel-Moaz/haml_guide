@@ -5,6 +5,8 @@ import 'package:haml_guide/config/app_colors.dart';
 import 'package:haml_guide/config/common_components.dart';
 import 'package:haml_guide/screens/widgets/main_screens_widgets/haml_forward_screen_widgets.dart';
 
+import '../../config/cache_helper.dart';
+
 class HamlForwardScreen extends StatefulWidget {
   const HamlForwardScreen({Key? key}) : super(key: key);
 
@@ -18,7 +20,9 @@ class _HamlForwardScreenState extends State<HamlForwardScreen> {
   late BannerAd _myBanner;
   @override
   void initState() {
-   // CommonComponents.createIntersitial(_interstitialAd);
+    CacheHelper.saveData(key: 'start_index', value: 2);
+
+    // CommonComponents.createIntersitial(_interstitialAd);
     _myBanner = CommonComponents.getBannerAds();
     _myBanner.load();
     super.initState();

@@ -20,6 +20,10 @@ class CacheHelper {
     return (sharedPreferences.get(key) ?? defaultValue);
   }
 
+  static int? geInt({required String key, int? defaultValue = null}) {
+    return (sharedPreferences.getInt(key) ?? defaultValue);
+  }
+
   static Future<bool> saveData({
     required String key,
     required dynamic value,

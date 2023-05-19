@@ -17,6 +17,7 @@ import 'package:haml_guide/providers/screen_providers/main_screens_providers_api
 import 'package:haml_guide/screens/widgets/main_screens_widgets/haml_screen_widgets.dart';
 import 'package:riverpod_context/riverpod_context.dart';
 
+import '../../config/cache_helper.dart';
 import '../../config/geolocator_service.dart';
 import '../../main.dart';
 
@@ -34,6 +35,8 @@ class _HamlScreenState extends State<HamlScreen> {
 
   @override
   void initState() {
+    CacheHelper.saveData(key: 'start_index', value: 2);
+
     Future.delayed(
       Duration.zero,
       () async {

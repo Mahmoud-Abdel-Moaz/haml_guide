@@ -1,6 +1,8 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +20,9 @@ import 'config/local_notification_service.dart';
 Future<void> _firebaseMessagingBackGroundHandler(RemoteMessage messages) async {
   await Firebase.initializeApp();
 
+
+
+
   debugPrint("Handling firebase messaging background${messages.messageId}");
 }
 String? Fcmtoken;
@@ -28,6 +33,7 @@ Future main() async {
   await CommonComponents.initSharedPreferences();
   await MobileAds.instance.initialize();
   FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   if (Platform.isAndroid) {
     final deviceInfoPlugin = DeviceInfoPlugin();
     androidInfo = await deviceInfoPlugin.androidInfo;
@@ -52,11 +58,11 @@ class HamlGuide extends StatefulWidget {
 class _HamlGuideState extends State<HamlGuide> {
   @override
   void initState() {
-    LocalNotificationService.initialize(context);
 
     context
         .read(ApiProviders.notificationHandler)
         .notificationInitialization(context);
+    LocalNotificationService.initialize(context);
 
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackGroundHandler);
     FirebaseMessaging.onMessage.listen((event) {

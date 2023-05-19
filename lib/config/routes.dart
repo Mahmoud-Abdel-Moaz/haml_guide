@@ -10,6 +10,9 @@ import 'package:haml_guide/screens/main_screens/haml_forwad_screens.dart/weight_
 import 'package:haml_guide/screens/main_screens/haml_forwad_screens.dart/weight_screens/main_weight_screen.dart';
 import 'package:haml_guide/screens/splash_screen.dart';
 
+import '../screens/drawer_screens/sources_screen.dart';
+import '../screens/main_screen.dart';
+
 class PATHS {
   static const String splashScreen = "SplashScreen";
   static const String favouriteScreen = "FavouriteScreen";
@@ -22,6 +25,8 @@ class PATHS {
   static const String forwardHamlDetails = "ForwardHamlDetails";
   static const String addWeightScreen = "AddWeightScreen";
   static const String addRklatScreen = "AddRklatScreen";
+  static const String sourcesScreen = "SourcesScreen";
+  static const String mainScreen = "MainScreen";
 }
 
 var routes = {
@@ -36,4 +41,6 @@ var routes = {
   PATHS.forwardHamlDetails: (context) => const HamlForwardDetailsScreen(),
   PATHS.addWeightScreen: (context) => const AddWeightScreen(),
   PATHS.addRklatScreen: (context) => const AddRklatScreen(),
+  PATHS.sourcesScreen: (context) => const SourcesScreen(),
+  PATHS.mainScreen: (context) => const MainScreen(),
 };

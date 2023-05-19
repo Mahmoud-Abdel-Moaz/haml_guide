@@ -33,6 +33,8 @@ class _HamlForwardDetailsScreenState extends State<HamlForwardDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    print('HamlForwardDetailsScreen ${widget.appBarTitle} ${widget.title} ${widget.image}');
     double devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
   //  HamlForwardDetailsScreen? args = ModalRoute.of(context)?.settings.arguments as HamlForwardDetailsScreen?;
 

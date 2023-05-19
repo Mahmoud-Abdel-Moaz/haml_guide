@@ -10,6 +10,8 @@ import 'package:haml_guide/config/init_screen_providers.dart';
 import 'package:haml_guide/screens/widgets/main_screens_widgets/baby_names_screen_widgets.dart';
 import 'package:riverpod_context/riverpod_context.dart';
 
+import '../../config/cache_helper.dart';
+
 class BabyNameScreen extends StatefulWidget {
   const BabyNameScreen({Key? key}) : super(key: key);
 
@@ -35,6 +37,7 @@ class _BabyNameScreenState extends State<BabyNameScreen> {
   void initState() {
     context.refresh(ApiProviders.namesScreenProvidersApis);
     context.refresh(InitScreenProviders.babyNamesProviders);
+    CacheHelper.saveData(key: 'start_index', value: 2);
 
     Future.delayed(
       Duration.zero,

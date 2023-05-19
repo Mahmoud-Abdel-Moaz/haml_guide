@@ -8,6 +8,8 @@ import 'package:haml_guide/config/init_screen_providers.dart';
 import 'package:haml_guide/screens/drawer_screen.dart';
 import 'package:riverpod_context/riverpod_context.dart';
 
+import '../config/cache_helper.dart';
+
 class MainScreen extends StatefulWidget {
   final int? startIndex;
   const MainScreen({Key? key, this.startIndex}) : super(key: key);
@@ -20,11 +22,14 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
+
     if(widget.startIndex!=null){
+      /*print('${widget.startIndex!} object');
       context
           .read(InitScreenProviders.mainScreenProviders)
-          .tabIsSelected(widget.startIndex!);
+          .tabIsSelected(widget.startIndex!);*/
     }
+
     super.initState();
   }
   @override

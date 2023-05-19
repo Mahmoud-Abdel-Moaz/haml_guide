@@ -161,7 +161,16 @@ class PressureScreenWidgets {
         itemCount: contentList.length,
         itemBuilder: (context, index) => InkWell(
           onTap: () {
-            Navigator.pushNamed(
+
+            navigateTo(context, HamlForwardDetailsScreen(
+              appBarTitle: appBarTitle,
+              description: (contentList[index].description??''),
+              image: image,
+              title:
+              "قياس الضغط الحالي هو ${contentList[index].pressureDown}/${contentList[index].pressureUp}",
+            ));
+
+            /*Navigator.pushNamed(
               context,
               PATHS.forwardHamlDetails,
               arguments: HamlForwardDetailsScreen(
@@ -171,7 +180,7 @@ class PressureScreenWidgets {
                 title:
                     "قياس الضغط الحالي هو ${contentList[index].pressureDown}/${contentList[index].pressureUp}",
               ),
-            );
+            );*/
           },
           child: Container(
             padding: EdgeInsets.all(10.0.h),

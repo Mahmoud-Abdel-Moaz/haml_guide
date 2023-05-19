@@ -64,15 +64,21 @@ class _DrawerScreenState extends State<DrawerScreen> {
                           Navigator.pop(context);
                         } else {
                           inAppReview.openStoreListing(
-                              appStoreId: 'com.hamilguide.pregnancycalc');
+                              appStoreId: '6443834135');
                           Navigator.pop(context);
                         }
                       } else if (drawers['title'] == "المفضله") {
                         Navigator.pop(context);
                         Navigator.pushNamed(context, drawers['destination']);
+                      } else if (drawers['title'] == "المصادر") {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, drawers['destination']);
                       } else if (drawers['title'] == "شارك التطبيق") {
-                        await Share.shareWithResult(
-                            "https://play.google.com/store/apps/details?id=com.dalil.elhwamelss");
+                        String iosLink="https://apps.apple.com/eg/app/hamilguide-حاسبة-الحمل-بدقة/id6443834135";
+                        String androidLink="https://play.google.com/store/apps/details?id=com.dalil.elhwamelss";
+
+                        Share.share(Platform.isAndroid ? androidLink : iosLink,
+                            subject: 'Hamilguide-حاسبة الحمل بدقة');
                         if (!mounted) return;
                         Navigator.pop(context);
                       } else if (drawers['title'] == "معلومات المستخدم") {

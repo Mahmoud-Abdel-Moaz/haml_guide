@@ -4,6 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:haml_guide/config/app_colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -404,6 +405,7 @@ class CommonComponents {
   }
 
   static Widget showBannerAds(BannerAd myBanner) {
+  
     return Center(
       child: SizedBox(
         height: 100.0.h,
@@ -413,3 +415,29 @@ class CommonComponents {
     );
   }
 }
+
+void showToast({
+  required String msg,
+  required ToastStates state,
+}) =>
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 5,
+        backgroundColor: _chooseToastColor(state),
+        textColor: Colors.white,
+        fontSize: 16.0);
+
+Color _chooseToastColor(ToastStates state) {
+  switch (state) {
+    case ToastStates.SUCCESS:
+      return Colors.green;
+    case ToastStates.WARNING:
+      return Colors.yellow;
+    case ToastStates.ERROR:
+      return Colors.red;
+  }
+}
+
+enum ToastStates { SUCCESS, ERROR, WARNING }
