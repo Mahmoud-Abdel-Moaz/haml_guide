@@ -32,7 +32,7 @@ class HamlScreenProvidersApis extends ChangeNotifier {
     required String country,
   }) async {
     String deviceID =
-        await CommonComponents.getSavedData(ApiKeys.deviceIdFromUser);
+         CommonComponents.getSavedData(ApiKeys.deviceIdFromUser);
 
     if (context.mounted) {
       dynamic d = await ApiRequests.getApiRequests(

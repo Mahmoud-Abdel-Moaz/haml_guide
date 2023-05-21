@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:haml_guide/config/api_keys.dart';
 import 'package:haml_guide/config/api_providers.dart';
@@ -6,6 +8,8 @@ import 'package:haml_guide/config/common_components.dart';
 import 'package:haml_guide/config/routes.dart';
 import 'package:haml_guide/models/haml_forward_models/haml_alarm_model.dart';
 import 'package:riverpod_context/riverpod_context.dart';
+
+import '../../../config/local_notification_service.dart';
 
 class HamlAlarmScreenProviders extends ChangeNotifier {
   String? timeForuser, dateForUser, dateTimeForUserNow, timeForuserIn24Hours;
@@ -33,8 +37,10 @@ class HamlAlarmScreenProviders extends ChangeNotifier {
       {required BuildContext context}) async {
     List<HamlAlarmModel> hamlAlarmsList = [];
 
-    int deviceID = await CommonComponents.getSavedData(ApiKeys.deviceIdFromApi);
-
+    int? deviceID =  CommonComponents.getSavedData(ApiKeys.deviceIdFromApi);
+if(deviceID==null){
+  return [];
+}
     if (context.mounted) {
       List<dynamic> dataList = await ApiRequests.getApiRequests(
         context: context,
@@ -65,6 +71,7 @@ class HamlAlarmScreenProviders extends ChangeNotifier {
       return null;
     }
     for (int i = 0; i < hamlAlarmsList.length; i++) {
+
       if (context.mounted) {
         DateTime? alarmTime=DateTime.tryParse((hamlAlarmsList[i].alarmDateAndTime??''));
         if(alarmTime!=null&&alarmTime.isAfter(DateTime.now())){
@@ -77,7 +84,7 @@ class HamlAlarmScreenProviders extends ChangeNotifier {
             description: (hamlAlarmsList[i].description ?? ''),
             dateTime: DateTime.parse(
                 (hamlAlarmsList[i].alarmDateAndTime ?? '')),
-            notificationIDS: i,
+            notificationIDS:(hamlAlarmsList[i].alarmID??43)+ 42,
           );
         }
       } else {
@@ -141,6 +148,7 @@ class HamlAlarmScreenProviders extends ChangeNotifier {
 
     if (data == null) {
       if (context.mounted) {
+        LocalNotificationService.cancelNotificationById(alarmID+42);
         CommonComponents.showCustomizedSnackBar(
             context: context, title: "تم الحذف بنجاح");
         Navigator.pushReplacementNamed(context, PATHS.mainAlarmScreen);

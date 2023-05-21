@@ -9,6 +9,8 @@ import 'package:haml_guide/models/haml_forward_models/haml_kicks_model.dart';
 import 'package:haml_guide/screens/widgets/main_screens_widgets/haml_forward_screens_widgets/kicks_screen_widgets.dart';
 import 'package:riverpod_context/riverpod_context.dart';
 
+import '../../../../config/api_keys.dart';
+
 class MainRklatScreen extends StatefulWidget {
   const MainRklatScreen({Key? key}) : super(key: key);
 
@@ -38,6 +40,8 @@ class _MainRklatScreenState extends State<MainRklatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int? deviceID =  CommonComponents.getSavedData(ApiKeys.deviceIdFromApi);
+
     return Scaffold(
       appBar: CommonComponents.commonAppBarForwardHaml(title: "ركلات الجنين"),
       body: Padding(
@@ -56,6 +60,9 @@ class _MainRklatScreenState extends State<MainRklatScreen> {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
+                if(deviceID==null)
+                  const SizedBox(),
+                if(deviceID!=null)
                 InkWell(
                   onTap: () {
                     Navigator.pushNamed(context, PATHS.addRklatScreen);
@@ -83,6 +90,26 @@ class _MainRklatScreenState extends State<MainRklatScreen> {
             SizedBox(height: 20.0.h),
             CommonComponents.showBannerAds(_myBanner),
             SizedBox(height: 20.0.h),
+            if(deviceID==null)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: 50.h,),
+                  Center(
+                    child: Text(
+                      'لأستخدام تسجيل ركلات الجنين يجب تجربة الحاسبة أولا',
+                      style:  TextStyle(
+                        fontSize: 16.0.sp,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.center,
+                      textScaleFactor: 1,
+                    ),
+                  )
+                ],
+              ),
+            if(deviceID!=null)
             FutureBuilder(
                 future: _fetchAllKicksList,
                 builder:

@@ -25,7 +25,7 @@ class WeeksScreen extends StatefulWidget {
 class _WeeksScreenState extends State<WeeksScreen> {
   Future<WeeksModel?>? _getWeeksData;
  late AutoScrollController _scrollController;
- late InterstitialAd _interstitialAd;
+  InterstitialAd? _interstitialAd;
   late BannerAd _myBanner;
  late Future<List<BannerCustomModel>?> _bannerCustom;
 
@@ -75,6 +75,8 @@ class _WeeksScreenState extends State<WeeksScreen> {
     });
     _myBanner = CommonComponents.getBannerAds();
     _myBanner.load();
+    CommonComponents.createIntersitial(_interstitialAd);
+
     super.initState();
   }
 

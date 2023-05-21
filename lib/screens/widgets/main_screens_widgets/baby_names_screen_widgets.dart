@@ -5,6 +5,9 @@ import 'package:haml_guide/config/app_colors.dart';
 import 'package:haml_guide/models/names_model.dart';
 import 'package:riverpod_context/riverpod_context.dart';
 
+import '../../../config/api_keys.dart';
+import '../../../config/common_components.dart';
+
 class BabyNamesScreenWidgets {
   static Widget babyTypesFields({
     required String title,
@@ -102,6 +105,8 @@ class BabyNamesScreenWidgets {
     required List<NamesModel> babyNames,
     required ScrollController scrollController,
   }) {
+    int? deviceID =  CommonComponents.getSavedData(ApiKeys.deviceIdFromApi);
+
     return GridView.builder(
       controller: scrollController,
       physics: const BouncingScrollPhysics(),
@@ -128,6 +133,9 @@ class BabyNamesScreenWidgets {
           ),
           child: Column(
             children: [
+              if(deviceID==null)
+                SizedBox(height: 15.h,),
+              if(deviceID!=null)
               Align(
                 alignment: Alignment.centerLeft,
                 child: InkWell(

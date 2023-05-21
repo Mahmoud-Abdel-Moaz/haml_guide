@@ -405,7 +405,7 @@ class CommonComponents {
   }
 
   static Widget showBannerAds(BannerAd myBanner) {
-  
+    myBanner.load();
     return Center(
       child: SizedBox(
         height: 100.0.h,

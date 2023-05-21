@@ -17,8 +17,10 @@ class HamlWeigtScreenProvidersApis extends ChangeNotifier {
       {required BuildContext context}) async {
     List<HamlWeightModel> hamlWeightsList = [];
 
-    int deviceId = await CommonComponents.getSavedData(ApiKeys.deviceIdFromApi);
-
+    int? deviceId =  CommonComponents.getSavedData(ApiKeys.deviceIdFromApi);
+if(deviceId == null){
+  return [];
+}
     if (context.mounted) {
       List<dynamic> dataList = await ApiRequests.getApiRequests(
         context: context,

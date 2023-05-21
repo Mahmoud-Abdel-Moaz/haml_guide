@@ -8,6 +8,7 @@ import 'package:haml_guide/config/init_screen_providers.dart';
 import 'package:haml_guide/screens/drawer_screen.dart';
 import 'package:riverpod_context/riverpod_context.dart';
 
+import '../config/api_keys.dart';
 import '../config/cache_helper.dart';
 
 class MainScreen extends StatefulWidget {
@@ -34,6 +35,9 @@ class _MainScreenState extends State<MainScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    String? deviceID =
+    CommonComponents.getSavedData(ApiKeys.deviceIdFromUser);
+    print('deviceIdFromUser $deviceID');
     double devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
     return Scaffold(
       drawer: const DrawerScreen(),

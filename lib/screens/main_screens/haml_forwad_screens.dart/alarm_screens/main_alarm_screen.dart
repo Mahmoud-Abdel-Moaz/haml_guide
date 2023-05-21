@@ -8,6 +8,8 @@ import 'package:haml_guide/models/haml_forward_models/haml_alarm_model.dart';
 import 'package:haml_guide/screens/widgets/main_screens_widgets/haml_forward_screens_widgets/alarm_screen_widgets.dart';
 import 'package:riverpod_context/riverpod_context.dart';
 
+import '../../../../config/api_keys.dart';
+
 class MainAlarmScreen extends StatefulWidget {
   const MainAlarmScreen({Key? key}) : super(key: key);
 
@@ -48,6 +50,8 @@ class _MainAlarmScreenState extends State<MainAlarmScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int? deviceID =  CommonComponents.getSavedData(ApiKeys.deviceIdFromApi);
+
     return Scaffold(
       appBar: CommonComponents.commonAppBarForwardHaml(title: "المنبه"),
       body: Padding(
@@ -66,6 +70,9 @@ class _MainAlarmScreenState extends State<MainAlarmScreen> {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
+                if(deviceID==null)
+                  const SizedBox(),
+                if(deviceID!=null)
                 InkWell(
                   onTap: () async {
                     await AlarmScreenWidgets.alarmAlertWidget(
@@ -100,7 +107,27 @@ class _MainAlarmScreenState extends State<MainAlarmScreen> {
             SizedBox(height: 20.0.h),
             CommonComponents.showBannerAds(_myBannerMain),
             SizedBox(height: 20.0.h),
-            FutureBuilder(
+            if(deviceID==null)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: 50.h,),
+                  Center(
+                    child: Text(
+                      'لأستخدام المنه يجب تجربة الحاسبة أولا',
+                      style:  TextStyle(
+                        fontSize: 16.0.sp,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.center,
+                      textScaleFactor: 1,
+                    ),
+                  )
+                ],
+              ),
+            if(deviceID!=null)
+              FutureBuilder(
                 future: _fetchAllAlarms,
                 builder:
                     (context, AsyncSnapshot<List<HamlAlarmModel>?> snapshot) {

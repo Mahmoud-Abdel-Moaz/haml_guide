@@ -8,6 +8,8 @@ import 'package:haml_guide/models/haml_forward_models/haml_pressure_model.dart';
 import 'package:haml_guide/screens/widgets/main_screens_widgets/haml_forward_screens_widgets/pressure_screen_widgets.dart';
 import 'package:riverpod_context/riverpod_context.dart';
 
+import '../../../../config/api_keys.dart';
+
 class MainPressureScreen extends StatefulWidget {
   const MainPressureScreen({Key? key}) : super(key: key);
 
@@ -45,6 +47,8 @@ class _MainPressureScreenState extends State<MainPressureScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int? deviceID =  CommonComponents.getSavedData(ApiKeys.deviceIdFromApi);
+
     return Scaffold(
       appBar: CommonComponents.commonAppBarForwardHaml(title: "قياس الضغط"),
       body: Padding(
@@ -63,6 +67,9 @@ class _MainPressureScreenState extends State<MainPressureScreen> {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
+                if(deviceID==null)
+                  const SizedBox(),
+                if(deviceID!=null)
                 InkWell(
                   onTap: () async {
                     await PressureScreenWidgets.pressureAlertWidget(
@@ -96,6 +103,26 @@ class _MainPressureScreenState extends State<MainPressureScreen> {
             SizedBox(height: 20.0.h),
             CommonComponents.showBannerAds(_myBannerMain),
             SizedBox(height: 20.0.h),
+            if(deviceID==null)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: 50.h,),
+                  Center(
+                    child: Text(
+                      'لأستخدام قياس الضغط يجب تجربة الحاسبة أولا',
+                      style:  TextStyle(
+                        fontSize: 16.0.sp,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.center,
+                      textScaleFactor: 1,
+                    ),
+                  )
+                ],
+              ),
+            if(deviceID!=null)
             FutureBuilder(
                 future: _fetcAllHamlPressures,
                 builder:

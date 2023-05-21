@@ -5,6 +5,7 @@ import 'package:haml_guide/config/app_colors.dart';
 import 'package:haml_guide/config/common_components.dart';
 import 'package:haml_guide/screens/widgets/main_screens_widgets/haml_forward_screen_widgets.dart';
 
+import '../../config/api_keys.dart';
 import '../../config/cache_helper.dart';
 
 class HamlForwardScreen extends StatefulWidget {
@@ -16,15 +17,17 @@ class HamlForwardScreen extends StatefulWidget {
 
 class _HamlForwardScreenState extends State<HamlForwardScreen> {
   //check snapshot
-  late InterstitialAd _interstitialAd;
+   InterstitialAd? _interstitialAd;
   late BannerAd _myBanner;
   @override
   void initState() {
     CacheHelper.saveData(key: 'start_index', value: 2);
-
+   // _interstitialAd=
     // CommonComponents.createIntersitial(_interstitialAd);
     _myBanner = CommonComponents.getBannerAds();
     _myBanner.load();
+    CommonComponents.createIntersitial(_interstitialAd);
+
     super.initState();
   }
 
@@ -36,6 +39,7 @@ class _HamlForwardScreenState extends State<HamlForwardScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     double devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
     return Scaffold(
       body: Padding(

@@ -16,8 +16,10 @@ class HamlSugarScreenProvidersApis extends ChangeNotifier {
       {required BuildContext context}) async {
     List<HamlSugarModel> hamlSugarList = [];
 
-    int deviceID = await CommonComponents.getSavedData(ApiKeys.deviceIdFromApi);
-
+    int? deviceID =  CommonComponents.getSavedData(ApiKeys.deviceIdFromApi);
+if(deviceID==null){
+  return [];
+}
     if (context.mounted) {
       List<dynamic> dataList = await ApiRequests.getApiRequests(
         context: context,

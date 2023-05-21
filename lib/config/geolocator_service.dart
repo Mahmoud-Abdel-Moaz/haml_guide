@@ -28,13 +28,26 @@ class GeolocatorService {
   static Future<Position?> checkLocationPermission() async {
     print('GeolocatorService checkLocationPermission');
     _permissionGranted = await Geolocator.checkPermission();
-    if (_permissionGranted != LocationPermission.denied &&
-        _permissionGranted != LocationPermission.deniedForever) {
+    if (_permissionGranted == LocationPermission.always ||
+        _permissionGranted == LocationPermission.whileInUse) {
+      // try{
+      //   return await getCurrentLocation();
+      //
+      // }catch(e){
+      //   print('error getCurrentLocation $e');
+      //   return null;
+      // }
       return await getCurrentLocation();
     } else {
       _permissionGranted = await Geolocator.requestPermission();
-      if (_permissionGranted != LocationPermission.denied &&
-          _permissionGranted != LocationPermission.deniedForever) {
+      if (_permissionGranted == LocationPermission.always ||
+          _permissionGranted == LocationPermission.whileInUse) {
+        /*try{
+          return await getCurrentLocation();
+        }catch(e){
+          print('error getCurrentLocation $e');
+          return null;
+        }*/
         return await getCurrentLocation();
       } else {
         return null;

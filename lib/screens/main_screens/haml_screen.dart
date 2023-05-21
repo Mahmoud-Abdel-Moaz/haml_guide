@@ -277,18 +277,33 @@ class _HamlScreenState extends State<HamlScreen> {
             Center(
               child: ElevatedButton(
                 onPressed: () async {
-                  Position? position =await GeolocatorService.checkLocationServicesInDevice();
-                  if(position==null){
+                  print('before checkLocationServicesInDevice');
+                  String? country;
+                  try{
+                    Position? position =await GeolocatorService.checkLocationServicesInDevice();
+                    print('before placemarks');
+                    if(position!=null){
+                      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude,localeIdentifier:'en');
+                      if(placemarks.isEmpty||placemarks.first.country==null){
+                        return;
+                      }
+                      print('after placemarks');
+                      country  =placemarks.first.country??'';
+                      //   country='Egypt';
+                    }
+                  }catch(e) {
+                    country='-';
+                  }
+                  if(country==null){
                     return;
                   }
-                  List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude,localeIdentifier:'en');
-                  if(placemarks.isEmpty||placemarks.first.country==null){
-                    return;
-                  }
-                  CommonComponents.saveData(key:ApiKeys.cachedCountry,value:(placemarks.first.country??'') );
-                  print('placemarks ${placemarks.first.country}');
+
+                  CommonComponents.saveData(key:ApiKeys.cachedCountry,value:country );
+                  print('placemarks $country');
                   HamlScreenProviders hamlDataProviders =
                       context.read(InitScreenProviders.hamlScreenProviders);
+
+
 
                   if (_formkey.currentState!=null&&_formkey.currentState!.validate()) {
                     if (Platform.isAndroid) {
@@ -328,7 +343,7 @@ class _HamlScreenState extends State<HamlScreen> {
                                           UserSelectedBirthType.hijari
                                       ? "${hamlDataProviders.yearSelected}-${hamlDataProviders.monthSelected}-${hamlDataProviders.daySelected}"
                                       : null,
-                                  fcmToken: (value??''), country: (placemarks.first.country??''),
+                                  fcmToken: (value??''), country: (country??'-'),
                                 );
                             });
                       } else {
@@ -352,7 +367,7 @@ class _HamlScreenState extends State<HamlScreen> {
                                           UserSelectedBirthType.hijari
                                       ? "${hamlDataProviders.yearSelected}-${hamlDataProviders.monthSelected}-${hamlDataProviders.daySelected}"
                                       : null,
-                                  fcmToken:( value??''), country: (placemarks.first.country??''),
+                                  fcmToken:( value??''), country: (country??'-'),
                                 ));
                       }
                     } else {
@@ -397,7 +412,7 @@ class _HamlScreenState extends State<HamlScreen> {
                                           UserSelectedBirthType.hijari
                                       ? "${hamlDataProviders.yearSelected}-${hamlDataProviders.monthSelected}-${hamlDataProviders.daySelected}"
                                       : null,
-                                  fcmToken: (value??''), country: (placemarks.first.country??''),
+                                  fcmToken: (value??''), country: (country??'-'),
                                 );
                             });
                       } else {
@@ -425,7 +440,7 @@ class _HamlScreenState extends State<HamlScreen> {
                                             UserSelectedBirthType.hijari
                                         ? "${hamlDataProviders.yearSelected}-${hamlDataProviders.monthSelected}-${hamlDataProviders.daySelected}"
                                         : null,
-                                    fcmToken: (value??''), country:(placemarks.first.country??''),
+                                    fcmToken: (value??''), country:(country??'-'),
                                   );
                               },
                             );

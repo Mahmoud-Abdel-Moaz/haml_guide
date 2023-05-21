@@ -8,6 +8,8 @@ import 'package:haml_guide/models/haml_forward_models/haml_note_model.dart';
 import 'package:haml_guide/screens/widgets/main_screens_widgets/haml_forward_screens_widgets/notes_screen_widgets.dart';
 import 'package:riverpod_context/riverpod_context.dart';
 
+import '../../../../config/api_keys.dart';
+
 class MainNotesScreen extends StatefulWidget {
   const MainNotesScreen({Key? key}) : super(key: key);
 
@@ -46,6 +48,8 @@ class _MainNotesScreenState extends State<MainNotesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int? deviceID =  CommonComponents.getSavedData(ApiKeys.deviceIdFromApi);
+
     return Scaffold(
       appBar: CommonComponents.commonAppBarForwardHaml(title: "الملاحظات"),
       body: Padding(
@@ -64,7 +68,10 @@ class _MainNotesScreenState extends State<MainNotesScreen> {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                InkWell(
+                if(deviceID==null)
+                  const SizedBox(),
+                  if(deviceID!=null)
+                  InkWell(
                   onTap: () async {
                     await NotesScreenWidgets.noteAlertWidget(
                       context: context,
@@ -96,6 +103,26 @@ class _MainNotesScreenState extends State<MainNotesScreen> {
             SizedBox(height: 20.0.h),
             CommonComponents.showBannerAds(_myBannerMain),
             SizedBox(height: 20.0.h),
+            if(deviceID==null)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: 50.h,),
+                  Center(
+                    child: Text(
+                      'لأستخدام الملاحظات يجب تجربة الحاسبة أولا',
+                      style:  TextStyle(
+                        fontSize: 16.0.sp,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.center,
+                      textScaleFactor: 1,
+                    ),
+                  )
+                ],
+              ),
+            if(deviceID!=null)
             FutureBuilder(
                 future: _getAllHamlNotes,
                 builder:

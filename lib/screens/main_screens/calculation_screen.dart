@@ -62,6 +62,9 @@ class _CalculationScreenState extends State<CalculationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String? deviceID =
+    CommonComponents.getSavedData(ApiKeys.deviceIdFromUser);
+    print('deviceIdFromUser $deviceID');
     double devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
     return Scaffold(
       body: FutureBuilder(

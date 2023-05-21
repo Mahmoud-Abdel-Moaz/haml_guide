@@ -34,8 +34,10 @@ class FavouriteNamesScreenProvidersApis extends ChangeNotifier {
 
   Future<void> getNamesFavourites({required BuildContext context}) async {
     List<NamesModel> namesFavList = [];
-    int deviceId = await CommonComponents.getSavedData(ApiKeys.deviceIdFromApi);
-
+    int? deviceId =  CommonComponents.getSavedData(ApiKeys.deviceIdFromApi);
+if(deviceId==null){
+  return ;
+}
     if (context.mounted) {
       Map<String, dynamic> dataList = await ApiRequests.getApiRequests(
         context: context,
