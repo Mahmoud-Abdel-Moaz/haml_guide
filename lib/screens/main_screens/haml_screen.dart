@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -19,6 +20,7 @@ import 'package:riverpod_context/riverpod_context.dart';
 
 import '../../config/cache_helper.dart';
 import '../../config/geolocator_service.dart';
+import '../../config/network.dart';
 import '../../main.dart';
 
 class HamlScreen extends StatefulWidget {
@@ -278,8 +280,9 @@ class _HamlScreenState extends State<HamlScreen> {
               child: ElevatedButton(
                 onPressed: () async {
                   print('before checkLocationServicesInDevice');
-                  String? country;
-                  try{
+                  String? country=await getCountry();
+                  print('getCountry $country');
+                 /* try{
                     Position? position =await GeolocatorService.checkLocationServicesInDevice();
                     print('before placemarks');
                     if(position!=null){
@@ -296,13 +299,12 @@ class _HamlScreenState extends State<HamlScreen> {
                   }
                   if(country==null){
                     return;
-                  }
+                  }*/
 
                   CommonComponents.saveData(key:ApiKeys.cachedCountry,value:country );
                   print('placemarks $country');
                   HamlScreenProviders hamlDataProviders =
                       context.read(InitScreenProviders.hamlScreenProviders);
-
 
 
                   if (_formkey.currentState!=null&&_formkey.currentState!.validate()) {
@@ -465,5 +467,11 @@ class _HamlScreenState extends State<HamlScreen> {
         ),
       ),
     );
+  }
+  Future<String> getCountry() async{
+    Network n =  Network("http://ip-api.com/json");
+    String locationSTR = (await n.getData());
+    Map<String,dynamic> locationx = jsonDecode(locationSTR);
+    return locationx["country"];
   }
 }

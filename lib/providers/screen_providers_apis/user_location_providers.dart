@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+
+import '../../config/network.dart';
 
 class UserLocationProviders extends ChangeNotifier {
   String? userCountry;
@@ -11,7 +15,7 @@ class UserLocationProviders extends ChangeNotifier {
   }
 
   Future<void> getUserLocation() async {
-    LocationPermission permission = await Geolocator.checkPermission();
+  /*  LocationPermission permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.always ||
         permission == LocationPermission.whileInUse) {
@@ -24,7 +28,11 @@ class UserLocationProviders extends ChangeNotifier {
       });
     } else {
       await Geolocator.requestPermission();
-    }
+    }*/
+    Network n =  Network("http://ip-api.com/json");
+    String locationSTR = (await n.getData());
+    Map<String,dynamic> locationx = jsonDecode(locationSTR);
+    return locationx["country"];
   }
 
   Future<List<Placemark>> placemarkFromCoordinates(
